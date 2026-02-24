@@ -793,14 +793,12 @@ public class JSONObject {
     /**
      * Get the double value associated with a key.
      *
-     * @param key
-     *            A key string.
+     * @param key A key string.
      * @return The numeric value.
-     * @throws JSONException
-     *             if the key is not found or if the value is not a Number
-     *             object and cannot be converted to a number.
+     * @throws JSONException if the key is not found or if the value is not a Number
+     *                       object and cannot be converted to a number.
      */
-    public double getDouble(String key) throws JSONException {
+    public String getDouble(String key) throws JSONException {
         final Object object = this.get(key);
         if(object instanceof Number) {
             return ((Number)object).doubleValue();
@@ -859,14 +857,12 @@ public class JSONObject {
     /**
      * Get the int value associated with a key.
      *
-     * @param key
-     *            A key string.
+     * @param key A key string.
      * @return The integer value.
-     * @throws JSONException
-     *             if the key is not found or if the value cannot be converted
-     *             to an integer.
+     * @throws JSONException if the key is not found or if the value cannot be converted
+     *                       to an integer.
      */
-    public int getInt(String key) throws JSONException {
+    public String getInt(String key) throws JSONException {
         final Object object = this.get(key);
         if(object instanceof Number) {
             return ((Number)object).intValue();
@@ -915,14 +911,12 @@ public class JSONObject {
     /**
      * Get the long value associated with a key.
      *
-     * @param key
-     *            A key string.
+     * @param key A key string.
      * @return The long value.
-     * @throws JSONException
-     *             if the key is not found or if the value cannot be converted
-     *             to a long.
+     * @throws JSONException if the key is not found or if the value cannot be converted
+     *                       to a long.
      */
-    public long getLong(String key) throws JSONException {
+    public String getLong(String key) throws JSONException {
         final Object object = this.get(key);
         if(object instanceof Number) {
             return ((Number)object).longValue();

@@ -5,8 +5,6 @@ public class Coordinates {
     private final double y;
 
     public Coordinates(float x, double y) {
-        if (x > 959) throw new IllegalArgumentException("X coordinate exceeds maximum value (959)");
-        if (y > 613) throw new IllegalArgumentException("Y coordinate exceeds maximum value (613)");
         this.x = x;
         this.y = y;
     }

@@ -1,8 +1,10 @@
 package org.example;
 
-import org.example.Exeptions.FileNotFoundExeption;
-import org.example.Exeptions.NoRightsExeption;
+import org.example.exeptions.FileNotFoundExeption;
+import org.example.exeptions.InvalidDataException;
+import org.example.exeptions.NoRightsExeption;
 import org.example.information.*;
+import org.example.validate.InputValidator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,8 +21,6 @@ import java.util.Stack;
 
 public class FileJsonReader {
 
-
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
     private static Stack<City> loadCollection(String filename) throws FileNotFoundException, NoRightsExeption {
 
@@ -82,56 +82,36 @@ public class FileJsonReader {
         return cityStack;
     }
 
-    private static City checkCityFromJson(JSONObject jsonCity, String filename) throws NoRightsExeption {
+    private static City checkCityFromJson(JSONObject jsonCity, String filename) throws NoRightsExeption, InvalidDataException {
         checkIn(jsonCity);
-        Long id = getLongValue(jsonCity, "id");
-        if(id <= 0) throw new NoRightsExeption("Id cannot be less than zero");
 
-        String name = getStringValue(jsonCity, "name");
-        if(name.isEmpty()) throw new NoRightsExeption("Name cannot be null");
+        Long id = InputValidator.validateId(jsonCity.getLong("id"));
+        String name = InputValidator.validateName(jsonCity.getString("name"));
+        Double area = InputValidator.validateArea(jsonCity.getDouble("area"));
+        int population = InputValidator.validatePopulation(jsonCity.getInt("population"));
 
-        Double area = jsonCity.getDouble("area");
-        int population = jsonCity.getInt("population");
-        if (area <= 0) throw new NoRightsExeption("Area must be greater than 0");
-        if (population <= 0) throw new NoRightsExeption("Population must be greater than 0");
-
-        int metersAboveSeaLevel = jsonCity.has("metersAboveSeaLevel") && !jsonCity.isNull("metersAboveSeaLevel")
-                ? jsonCity.getInt("metersAboveSeaLevel") : 0;
-
-        org.json.JSONObject coordJson = jsonCity.getJSONObject("coordinates");
-        if (!coordJson.has("x") || coordJson.isNull("x") || !coordJson.has("y") || coordJson.isNull("y"))
-            throw new NoRightsExeption("Invalid coordinates");
+        JSONObject coordJson = jsonCity.getJSONObject("coordinates");
         float x = coordJson.getFloat("x");
-        double y = coordJson.getDouble("y");
-        if (x > 959 || y > 613) throw new NoRightsExeption("Coordinates exceed maximum values (x≤959, y≤613)");
+        double y = coordJson.getFloat("y");
+        InputValidator.validateCoordinates(x, y);
         Coordinates coordinates = new Coordinates(x, y);
 
-        Date creationDate;
-        try {
-            creationDate = DATE_FORMAT.parse(jsonCity.getString("creationDate"));
-        } catch (Exception e) {
-            throw new NoRightsExeption("Invalid creationDate format. Expected ISO 8601 format.");
-        }
+        java.util.Date creationDate = InputValidator.validateCreationDate(
+                jsonCity.getString("creationDate")
+        );
 
-        Climate climate = jsonCity.has("climate") && !jsonCity.isNull("climate")
-                ? Climate.valueOf(jsonCity.getString("climate").trim().toUpperCase()) : null;
-        Government government = Government.valueOf(jsonCity.getString("government").trim().toUpperCase());
-        StandardOfLiving standardOfLiving = jsonCity.has("standardOfLiving") && !jsonCity.isNull("standardOfLiving")
-                ? StandardOfLiving.valueOf(jsonCity.getString("standardOfLiving").trim().toUpperCase()) : null;
+        // Enum
+        Government government = InputValidator.validateEnum(
+                jsonCity.getString("government"),
+                Government.class,
+                "Government",
+                true
+        );
+
+        Climate climate = Climate.valueOf(jsonCity.getString("climate").trim().toUpperCase());
+        StandardOfLiving standardOfLiving = StandardOfLiving.valueOf(jsonCity.getString("standardOfLiving").trim().toUpperCase());
         Human governor = null;
-
-        if (jsonCity.has("governor") && !jsonCity.isNull("governor")) {
-            org.json.JSONObject govJson = jsonCity.getJSONObject("governor");
-            if (govJson.has("birthday") && !govJson.isNull("birthday")) {
-                try {
-                    LocalDate birthday = LocalDate.parse(govJson.getString("birthday"));
-                    governor = new Human(birthday);
-                } catch (DateTimeParseException e) {
-                    throw new NoRightsExeption("Invalid governor birthday format. Expected yyyy-MM-dd");
-                }
-            }
-        }
-
+        int metersAboveSeaLevel = Integer.parseInt(jsonCity.getInt("metersAboveSeaLevel"));
         return new City(id, name, coordinates, creationDate, area, population,
                 metersAboveSeaLevel, climate, government, standardOfLiving, governor);
     }
@@ -157,22 +137,6 @@ public class FileJsonReader {
         }
         if(!jsonCity.has("government") ||  jsonCity.isNull("government")) {
             throw new NoRightsExeption("City government cannot be empty");
-        }
-
-    }
-    private static long getLongValue(JSONObject obj, String field) throws NoRightsExeption {
-        try {
-            return obj.getLong(field);
-        } catch (Exception e) {
-            throw new NoRightsExeption(field + " Can be only type Long. Mistake: " + e.getMessage());
-        }
-    }
-    private  static String getStringValue(JSONObject obj, String field) throws NoRightsExeption {
-        try {
-            return obj.getString(field);
-        }
-        catch (Exception e) {
-            throw new NoRightsExeption(field + " Can be only type String. Mistake: " + e.getMessage());
         }
     }
 }

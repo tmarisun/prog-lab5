@@ -1,8 +1,12 @@
 package org.example;
 
+import org.example.information.City;
+
 import java.util.Date;
 import java.util.Scanner;
 import java.util.Stack;
+
+import static org.example.ConsoleInputHandler.readCityFromConsole;
 
 public class Run {
 
@@ -10,7 +14,8 @@ public class Run {
         System.out.println("City Management System initialized. Type 'help' for commands.");
         while (true) {
             System.out.print("\n> ");
-            String line = consoleScanner.nextLine().trim();
+            Scanner scanner = new Scanner(System.in);
+            String line = scanner.nextLine().trim();
             if (line.isEmpty()) continue;
 
             String[] parts = line.split("\\s+", 2);
@@ -103,6 +108,13 @@ public class Run {
         System.out.println("Collection type: java.util.Stack");
         System.out.println("Initialization date: " + new Date());
         System.out.println("Number of elements: " + cityStack.size());
+        int nextId = 0;
+        for(City city : cityStack) {
+            if(city.getId() > nextId) {
+                nextId = city.getId();
+            }
+        }
+        nextId++;
         System.out.println("Next auto-generated ID: " + nextId);
     }
 
@@ -129,7 +141,8 @@ public class Run {
     private String readNonEmptyString(String prompt) {
         while (true) {
             System.out.print(prompt);
-            String input = Scanner.nextLine().trim();
+            Scanner scanner = new Scanner(System.in);
+            String input = scanner.nextLine().trim();
             if (!input.isEmpty()) return input;
             System.err.println("Value cannot be empty. Please try again.");
         }
@@ -139,7 +152,8 @@ public class Run {
         while (true) {
             System.out.print(prompt);
             try {
-                float value = Float.parseFloat(consoleScanner.nextLine().trim());
+                Scanner scanner = new Scanner(System.in);
+                float value = Float.parseFloat(scanner.nextLine().trim());
                 if (value <= max) return value;
                 System.err.println("Value must not exceed " + max);
             } catch (NumberFormatException e) {

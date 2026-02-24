@@ -1,17 +1,12 @@
 package org.example;
 
-import org.example.Exeptions.FileNotFoundExeption;
-import org.example.Exeptions.NoRightsExeption;
+import org.example.exeptions.NoRightsExeption;
+import org.example.information.City;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class Scene {
 
