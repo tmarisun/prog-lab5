@@ -1,7 +1,7 @@
 package org.example.commands;
 
 import org.example.Application;
-import org.example.JsonWriter;
+import org.example.service.JsonWriter;
 import java.util.Scanner;
 
 public class Save implements Command {
