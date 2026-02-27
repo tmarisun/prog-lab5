@@ -16,10 +16,13 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
 
 public class FileJsonReader {
+
 
 
     private static Stack<City> loadCollection(String filename) throws FileNotFoundException, NoRightsExeption {
@@ -48,8 +51,16 @@ public class FileJsonReader {
 
         String jsonText = content.toString().trim();
 
-        Stack<City> cities = parseCityFromJson(jsonText, filename);
-        return cities;
+        Stack<City> cityStack = parseCityFromJson(jsonText, filename);
+
+        Set<Long> ids = new HashSet<>();
+        for (City city : cityStack) {
+            if (!ids.add(city.getId())) {
+                throw new NoRightsExeption("Duplicate ID found: " + city.getId());
+            }
+        }
+
+        return cityStack;
     }
 
     public static Stack<City> getloadCollection(String filename) throws FileNotFoundException, NoRightsExeption {

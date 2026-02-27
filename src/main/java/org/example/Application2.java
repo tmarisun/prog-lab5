@@ -8,7 +8,7 @@ import java.util.Stack;
 
 import static org.example.ConsoleInputHandler.readCityFromConsole;
 
-public class Run {
+public class Application2 {
 
     public void run(Stack<City> cityStack) {
         System.out.println("City Management System initialized. Type 'help' for commands.");
