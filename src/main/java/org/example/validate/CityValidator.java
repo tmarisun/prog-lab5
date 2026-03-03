@@ -1,7 +1,7 @@
 package org.example.validate;
 
 import org.example.information.City;
-import org.example.exeptions.InvalidDataException;
+import org.example.exceptions.InvalidDataException;
 
 import java.util.Collection;
 import java.util.HashSet;

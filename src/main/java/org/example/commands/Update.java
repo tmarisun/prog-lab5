@@ -1,8 +1,8 @@
 package org.example.commands;
 
 import org.example.Application;
-import org.example.ConsoleInputHandler;
-import org.example.exeptions.InvalidDataException;
+import org.example.service.ConsoleInputHandler;
+import org.example.exceptions.InvalidDataException;
 import org.example.information.City;
 import org.example.validate.InputValidator;
 

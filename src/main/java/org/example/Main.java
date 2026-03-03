@@ -13,7 +13,12 @@ public class Main {
         }
 
         String fileName = args[0];
-        Application app = new Application(fileName);
-
+        try {
+            Application app = new Application(fileName);
+            Scene scene = new Scene(app);
+            scene.run();
+        } catch (Exception e) {
+            System.err.println("Ошибка: " + e.getMessage());
+        }
     }
 }

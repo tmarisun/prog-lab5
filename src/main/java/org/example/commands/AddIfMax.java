@@ -1,7 +1,7 @@
 package org.example.commands;
 
 import org.example.Application;
-import org.example.ConsoleInputHandler;
+import org.example.service.ConsoleInputHandler;
 import org.example.information.City;
 import java.util.Scanner;
 import java.util.Stack;

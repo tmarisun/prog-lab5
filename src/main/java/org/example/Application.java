@@ -1,6 +1,7 @@
 package org.example;
 
-import org.example.exeptions.NoRightsExeption;
+import lombok.Getter;
+import org.example.exceptions.NoRightsException;
 import org.example.information.City;
 import org.example.manager.ManagerCommands;
 import org.example.service.FileJsonReader;
@@ -10,24 +11,21 @@ import java.util.Stack;
 
 public class Application {
 
+    @Getter
     private Stack<City> cityStack;
+    @Getter
     private String fileName;
-    private final ManagerCommands managerCommands;
+    @Getter
+    private ManagerCommands managerCommands;
 
-    public Application(String filename) throws FileNotFoundException, NoRightsExeption {
+    public Application(String filename) throws FileNotFoundException, NoRightsException {
         this.fileName = filename;
-        this.cityStack = FileJsonReader.getloadCollection(filename);
+        this.cityStack = FileJsonReader.reloadCollection(filename);
         this.managerCommands = new ManagerCommands(this);
     }
 
 
-    public Stack<City> getCityStack() {
-        return cityStack;
-    }
 
-    public String getFileName() {
-        return fileName;
-    }
 
     public long getNextId() {
         return cityStack.stream()

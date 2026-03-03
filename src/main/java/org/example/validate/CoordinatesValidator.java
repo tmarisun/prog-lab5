@@ -1,6 +1,6 @@
 package org.example.validate;
 
-import org.example.exeptions.InvalidDataException;
+import org.example.exceptions.InvalidDataException;
 import org.example.information.Coordinates;
 
 public class CoordinatesValidator {

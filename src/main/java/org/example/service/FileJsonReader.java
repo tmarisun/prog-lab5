@@ -1,8 +1,8 @@
 package org.example.service;
 
-import org.example.exeptions.FileNotFoundExeption;
-import org.example.exeptions.InvalidDataException;
-import org.example.exeptions.NoRightsExeption;
+import org.example.exceptions.FileNotFoundException;
+import org.example.exceptions.InvalidDataException;
+import org.example.exceptions.NoRightsException;
 import org.example.information.*;
 import org.example.validate.InputValidator;
 import org.json.JSONArray;
@@ -10,7 +10,6 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,14 +20,14 @@ public class FileJsonReader {
 
 
 
-    private static Stack<City> loadCollection(String filename) throws FileNotFoundException, NoRightsExeption {
+    private static Stack<City> loadCollection(String filename) throws FileNotFoundException, NoRightsException {
 
         File file = new File(filename);
         if(!file.exists()) {
             throw new FileNotFoundException("File : " + filename + " not found. Please check the file path.");
         }
         if(!file.canRead()) {
-            throw new NoRightsExeption("File cannot be read:" + filename);
+            throw new NoRightsException("File cannot be read:" + filename);
         }
 
         StringBuilder content = new StringBuilder();
@@ -42,7 +41,7 @@ public class FileJsonReader {
             }
         }
         catch (Exception e) {
-            throw new FileNotFoundExeption("File cannot be read:" + filename);
+            throw new FileNotFoundException("File cannot be read:" + filename);
         }
 
         String jsonText = content.toString().trim();
@@ -52,19 +51,19 @@ public class FileJsonReader {
         Set<Long> ids = new HashSet<>();
         for (City city : cityStack) {
             if (!ids.add(city.getId())) {
-                throw new NoRightsExeption("Duplicate ID found: " + city.getId());
+                throw new NoRightsException("Duplicate ID found: " + city.getId());
             }
         }
 
         return cityStack;
     }
 
-    public static Stack<City> getloadCollection(String filename) throws FileNotFoundException, NoRightsExeption {
+    public static Stack<City> reloadCollection(String filename) throws FileNotFoundException, NoRightsException {
         return loadCollection(filename);
     }
 
 
-    private static Stack<City> parseCityFromJson(String jsonText, String filename) throws FileNotFoundException, NoRightsExeption {
+    private static Stack<City> parseCityFromJson(String jsonText, String filename) throws FileNotFoundException, NoRightsException {
         Stack<City> cityStack = new Stack<>();
 
         if (jsonText.isEmpty()) {
@@ -89,7 +88,7 @@ public class FileJsonReader {
         return cityStack;
     }
 
-    private static City checkCityFromJson(JSONObject jsonCity, String filename) throws NoRightsExeption, InvalidDataException {
+    private static City checkCityFromJson(JSONObject jsonCity, String filename) throws NoRightsException, InvalidDataException {
         checkIn(jsonCity);
 
         Long id = InputValidator.validateId(jsonCity.getLong("id"));
@@ -123,27 +122,27 @@ public class FileJsonReader {
                 metersAboveSeaLevel, climate, government, standardOfLiving, governor);
     }
 
-    private static void checkIn(JSONObject jsonCity) throws NoRightsExeption {
+    private static void checkIn(JSONObject jsonCity) throws NoRightsException {
         if(!jsonCity.has("id") || jsonCity.isNull("id")) {
-            throw new NoRightsExeption("City id cannot be empty");
+            throw new NoRightsException("City id cannot be empty");
         }
         if(!jsonCity.has("name") || jsonCity.isNull("name")) {
-            throw new NoRightsExeption("City name cannot be empty");
+            throw new NoRightsException("City name cannot be empty");
         }
         if(!jsonCity.has("coordinates") || jsonCity.isNull("coordinates")) {
-            throw new NoRightsExeption("City coordinates cannot be empty");
+            throw new NoRightsException("City coordinates cannot be empty");
         }
         if(!jsonCity.has("population") || jsonCity.isNull("population")) {
-            throw new NoRightsExeption("City population cannot be empty");
+            throw new NoRightsException("City population cannot be empty");
         }
         if(!jsonCity.has("creationDate") || jsonCity.isNull("creationDate")) {
-            throw new NoRightsExeption("City creationDate cannot be empty");
+            throw new NoRightsException("City creationDate cannot be empty");
         }
         if(!jsonCity.has("area") || jsonCity.isNull("area")) {
-            throw new NoRightsExeption("City area cannot be empty");
+            throw new NoRightsException("City area cannot be empty");
         }
         if(!jsonCity.has("government") ||  jsonCity.isNull("government")) {
-            throw new NoRightsExeption("City government cannot be empty");
+            throw new NoRightsException("City government cannot be empty");
         }
     }
 }
