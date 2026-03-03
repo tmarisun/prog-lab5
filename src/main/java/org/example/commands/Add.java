@@ -2,7 +2,7 @@ package org.example.commands;
 
 import org.example.Application;
 import org.example.service.ConsoleInputHandler;
-import org.example.information.City;
+import org.example.data.City;
 import java.util.Scanner;
 
 public class Add implements Command {
@@ -25,7 +25,7 @@ public class Add implements Command {
     @Override
     public void execute(Scanner scanner, String[] args) {
         try {
-            City city = ConsoleInputHandler.readCityFromConsole();
+            City city = ConsoleInputHandler.readCityFromConsole(null);
             app.addCity(city);
             System.out.println("Город добавлен с ID: " + city.getId());
         } catch (Exception e) {

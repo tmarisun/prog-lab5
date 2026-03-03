@@ -1,7 +1,7 @@
 package org.example.commands;
 
 import org.example.Application;
-import org.example.information.City;
+import org.example.data.City;
 import java.util.Scanner;
 
 public class Show implements Command {

@@ -2,7 +2,7 @@ package org.example;
 
 import lombok.Getter;
 import org.example.exceptions.NoRightsException;
-import org.example.information.City;
+import org.example.data.City;
 import org.example.manager.ManagerCommands;
 import org.example.service.FileJsonReader;
 

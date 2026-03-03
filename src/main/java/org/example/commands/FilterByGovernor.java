@@ -1,8 +1,8 @@
 package org.example.commands;
 
 import org.example.Application;
-import org.example.information.City;
-import org.example.information.Human;
+import org.example.data.City;
+import org.example.data.Human;
 import java.time.LocalDate;
 import java.util.Scanner;
 import java.util.Stack;

@@ -1,4 +1,4 @@
-package org.example.information;
+package org.example.data;
 
 public enum Government {
     KLEPTOCRACY,

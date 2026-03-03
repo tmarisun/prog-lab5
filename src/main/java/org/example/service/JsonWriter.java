@@ -1,10 +1,6 @@
 package org.example.service;
 
-import org.example.information.City;
-import org.example.information.Climate;
-import org.example.information.Government;
-import org.example.information.Human;
-import org.example.information.StandardOfLiving;
+import org.example.data.City;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,7 +9,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Stack;
 import java.util.TimeZone;
 

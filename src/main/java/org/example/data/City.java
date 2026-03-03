@@ -1,6 +1,5 @@
-package org.example.information;
+package org.example.data;
 
-import java.text.SimpleDateFormat;
 import lombok.Getter;
 import lombok.Setter;
 

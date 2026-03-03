@@ -1,7 +1,7 @@
 package org.example.validate;
 
 import org.example.exceptions.InvalidDataException;
-import org.example.information.Coordinates;
+import org.example.data.Coordinates;
 
 public class CoordinatesValidator {
     public static void validate(Coordinates coordinates) throws InvalidDataException {

@@ -1,6 +1,6 @@
 package org.example.validate;
 
-import org.example.information.City;
+import org.example.data.City;
 import org.example.exceptions.InvalidDataException;
 
 import java.time.LocalDate;

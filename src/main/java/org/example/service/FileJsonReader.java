@@ -3,7 +3,7 @@ package org.example.service;
 import org.example.exceptions.FileNotFoundException;
 import org.example.exceptions.InvalidDataException;
 import org.example.exceptions.NoRightsException;
-import org.example.information.*;
+import org.example.data.*;
 import org.example.validate.InputValidator;
 import org.json.JSONArray;
 import org.json.JSONObject;

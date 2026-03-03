@@ -2,7 +2,7 @@ package org.example.commands;
 
 import org.example.Application;
 import org.example.service.ConsoleInputHandler;
-import org.example.information.City;
+import org.example.data.City;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -39,7 +39,7 @@ public class InsertAt implements Command {
                 return;
             }
 
-            City city = ConsoleInputHandler.readCityFromConsole();
+            City city = ConsoleInputHandler.readCityFromConsole(null);
             stack.add(index, city);
             System.out.println("City inserted at position " + index);
 
