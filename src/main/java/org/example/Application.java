@@ -12,9 +12,7 @@ public class Application {
 
     private Stack<City> cityStack;
     private String fileName;
-    //private final ManagerServerQuery managerServer;
     private final ManagerCommands managerCommands;
-    //private ManagerConnection managerConnection;
 
     public Application(String filename) throws FileNotFoundException, NoRightsExeption {
         this.fileName = filename;
