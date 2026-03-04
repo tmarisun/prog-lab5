@@ -24,7 +24,7 @@ public class InsertAt implements Command {
     }
 
     @Override
-    public void execute(Scanner scanner, String[] args) {
+    public void execute(String[] args) {
         if (args.length < 2) {
             System.err.println("Usage: insert_at <index>");
             return;
@@ -39,7 +39,7 @@ public class InsertAt implements Command {
                 return;
             }
 
-            City city = ConsoleInputHandler.readCityFromConsole(null);
+            City city = ConsoleInputHandler.readCityFromConsole();
             stack.add(index, city);
             System.out.println("City inserted at position " + index);
 

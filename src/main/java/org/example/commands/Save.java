@@ -22,7 +22,7 @@ public class Save implements Command {
     }
 
     @Override
-    public void execute(Scanner scanner, String[] args) {
+    public void execute(String[] args) {
         try {
             JsonWriter.saveCitiesToFile(app.getCityStack(), app.getFileName());
             System.out.println("Collection saved to " + app.getFileName());

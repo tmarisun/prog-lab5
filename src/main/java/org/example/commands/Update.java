@@ -27,7 +27,7 @@ public class Update implements Command {
     }
 
     @Override
-    public void execute(Scanner scanner, String[] args) {
+    public void execute(String[] args) {
         if (args.length < 2) {
             System.err.println("Usage: update <id>");
             return;
@@ -52,7 +52,7 @@ public class Update implements Command {
                 return;
             }
 
-            City newCity = ConsoleInputHandler.readCityFromConsole(null);
+            City newCity = ConsoleInputHandler.readCityFromConsole();
             CityStack.remove(found);
             CityStack.push(newCity);
             System.out.println("City updated successfully.");

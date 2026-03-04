@@ -23,9 +23,9 @@ public class Add implements Command {
     }
 
     @Override
-    public void execute(Scanner scanner, String[] args) {
+    public void execute(String[] args) {
         try {
-            City city = ConsoleInputHandler.readCityFromConsole(null);
+            City city = ConsoleInputHandler.readCityFromConsole();
             app.addCity(city);
             System.out.println("Город добавлен с ID: " + city.getId());
         } catch (Exception e) {

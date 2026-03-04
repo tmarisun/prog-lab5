@@ -22,7 +22,7 @@ public class Sort implements Command {
     }
 
     @Override
-    public void execute(Scanner scanner, String[] args) {
+    public void execute(String[] args) {
         Collections.sort(app.getCityStack());
         System.out.println("Collection sorted by ID (natural order).");
     }

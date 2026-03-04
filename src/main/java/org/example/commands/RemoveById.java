@@ -26,7 +26,7 @@ public class RemoveById implements Command {
     }
 
     @Override
-    public void execute(Scanner scanner, String[] args) {
+    public void execute(String[] args) {
         if (args.length < 2) {
             System.err.println("Usage: remove_by_id <id>");
             return;

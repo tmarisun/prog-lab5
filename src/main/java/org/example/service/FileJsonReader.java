@@ -21,7 +21,7 @@ public class FileJsonReader {
 
 
 
-    private static Stack<City> loadCollection(String filename) throws FileNotFoundException, NoRightsException {
+    public static Stack<City> loadCollection(String filename) throws FileNotFoundException, NoRightsException {
 
         File file = new File(filename);
         if(!file.exists()) {
@@ -59,11 +59,6 @@ public class FileJsonReader {
         return cityStack;
     }
 
-    public static Stack<City> reloadCollection(String filename) throws FileNotFoundException, NoRightsException {
-        return loadCollection(filename);
-    }
-
-
     private static Stack<City> parseCityFromJson(String jsonText, String filename) throws FileNotFoundException, NoRightsException {
         Stack<City> cityStack = new Stack<>();
 
@@ -76,7 +71,7 @@ public class FileJsonReader {
             JSONArray jsonArray = new JSONArray(jsonText);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonCity = jsonArray.getJSONObject(i);
-                City city = checkCityFromJson(jsonCity, filename);
+                City city = checkCityFromJson(jsonCity);
                 cityStack.push(city);
             }
             System.out.println("Download " + cityStack.size() + "cities from the file" + filename);
@@ -89,13 +84,13 @@ public class FileJsonReader {
         return cityStack;
     }
 
-    private static City checkCityFromJson(JSONObject jsonCity, String filename) throws NoRightsException, InvalidDataException {
+    private static City checkCityFromJson(JSONObject jsonCity) throws NoRightsException, InvalidDataException {
         checkIn(jsonCity);
 
-        Long id = InputValidator.validateId(jsonCity.getLong("id"));
+        Long id = InputValidator.validateId(jsonCity.getString("id"));
         String name = InputValidator.validateName(jsonCity.getString("name"));
-        Double area = InputValidator.validateArea(jsonCity.getDouble("area"));
-        int population = InputValidator.validatePopulation(jsonCity.getInt("population"));
+        Double area = InputValidator.validateArea(jsonCity.getString("area"));
+        int population = InputValidator.validatePopulation(jsonCity.getString("population"));
 
         JSONObject cordJson = jsonCity.getJSONObject("coordinates");
         float x = cordJson.getFloat("x");
@@ -119,32 +114,32 @@ public class FileJsonReader {
         StandardOfLiving standardOfLiving = StandardOfLiving.valueOf(jsonCity.getString("standardOfLiving").trim().toUpperCase());
         Human governor = new Human(creationDate);
 
-        int metersAboveSeaLevel = Integer.parseInt(jsonCity.getInt("metersAboveSeaLevel"));
+        int metersAboveSeaLevel = Integer.parseInt(jsonCity.getString("metersAboveSeaLevel"));
         return new City(id, name, coordinates, creationDate, area, population,
                 metersAboveSeaLevel, climate, government, standardOfLiving, governor);
     }
 
-    private static void checkIn(JSONObject jsonCity) throws NoRightsException {
+    private static void checkIn(JSONObject jsonCity) throws IllegalArgumentException {
         if(!jsonCity.has("id") || jsonCity.isNull("id")) {
-            throw new NoRightsException("City id cannot be empty");
+            throw new IllegalArgumentException("City id cannot be empty");
         }
         if(!jsonCity.has("name") || jsonCity.isNull("name")) {
-            throw new NoRightsException("City name cannot be empty");
+            throw new IllegalArgumentException("City name cannot be empty");
         }
         if(!jsonCity.has("coordinates") || jsonCity.isNull("coordinates")) {
-            throw new NoRightsException("City coordinates cannot be empty");
+            throw new IllegalArgumentException("City coordinates cannot be empty");
         }
         if(!jsonCity.has("population") || jsonCity.isNull("population")) {
-            throw new NoRightsException("City population cannot be empty");
+            throw new IllegalArgumentException("City population cannot be empty");
         }
         if(!jsonCity.has("creationDate") || jsonCity.isNull("creationDate")) {
-            throw new NoRightsException("City creationDate cannot be empty");
+            throw new IllegalArgumentException("City creationDate cannot be empty");
         }
         if(!jsonCity.has("area") || jsonCity.isNull("area")) {
-            throw new NoRightsException("City area cannot be empty");
+            throw new IllegalArgumentException("City area cannot be empty");
         }
         if(!jsonCity.has("government") ||  jsonCity.isNull("government")) {
-            throw new NoRightsException("City government cannot be empty");
+            throw new IllegalArgumentException("City government cannot be empty");
         }
     }
 }

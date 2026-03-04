@@ -20,7 +20,7 @@ public class Application {
 
     public Application(String filename) throws FileNotFoundException, NoRightsException {
         this.fileName = filename;
-        cityStack = FileJsonReader.reloadCollection(filename);
+        cityStack = FileJsonReader.loadCollection(filename);
         this.managerCommands = new ManagerCommands(this);
     }
 

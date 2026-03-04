@@ -13,7 +13,6 @@ public class ExecuteScript implements Command {
     private final Application app;
     private final ManagerCommands managerCommands;
 
-    // Защита от рекурсии (чтобы скрипт не вызывал сам себя бесконечно)
     private static final List<String> executingScripts = new ArrayList<>();
 
     public ExecuteScript(Application app, ManagerCommands managerCommands) {
@@ -32,7 +31,7 @@ public class ExecuteScript implements Command {
     }
 
     @Override
-    public void execute(Scanner scanner, String[] args) {
+    public void execute(String[] args) {
         if (args.length < 2) {
             System.err.println("Usage: execute_script <file_name>");
             return;
@@ -41,7 +40,6 @@ public class ExecuteScript implements Command {
         String fileName = args[1].trim();
         File file = new File(fileName);
 
-        // Проверка существования файла
         if (!file.exists()) {
             System.err.println("File not found: " + fileName);
             return;
@@ -52,10 +50,8 @@ public class ExecuteScript implements Command {
             return;
         }
 
-        // Получаем абсолютный путь для защиты от рекурсии
         String absolutePath = file.getAbsolutePath();
 
-        // Проверка на рекурсию
         if (executingScripts.contains(absolutePath)) {
             System.err.println("Recursion detected! Script cannot call itself: " + fileName);
             return;
@@ -69,17 +65,15 @@ public class ExecuteScript implements Command {
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine().trim();
 
-                // Пропускаем пустые строки и комментарии
                 if (line.isEmpty() || line.startsWith("#")) {
                     continue;
                 }
 
                 System.out.println("$ " + line);
 
-                // Разбиваем команду на части
                 String[] commandParts = line.split("\\s+", 2);
 
-                managerCommands.callCommand(scanner, commandParts);
+                managerCommands.callCommand(commandParts);
             }
 
             System.out.println("Script execution completed: " + fileName);

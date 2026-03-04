@@ -23,7 +23,7 @@ public class Scene {
             if (line.isEmpty()) continue;
 
             String[] parts = line.split("\\s+", 2);
-            manager.callCommand(scanner, parts);
+            manager.callCommand(parts);
 
             if (parts[0].equalsIgnoreCase("exit")) break;
         }

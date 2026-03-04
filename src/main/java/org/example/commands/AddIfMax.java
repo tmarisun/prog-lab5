@@ -24,9 +24,9 @@ public class AddIfMax implements Command {
     }
 
     @Override
-    public void execute(Scanner scanner, String[] args) {
+    public void execute(String[] args) {
         try {
-            City candidate = ConsoleInputHandler.readCityFromConsole(null);
+            City candidate = ConsoleInputHandler.readCityFromConsole();
             Stack<City> stack = app.getCityStack();
 
             if (stack.isEmpty() || candidate.compareTo(stack.stream().max(City::compareTo).get()) > 0) {

@@ -35,14 +35,14 @@ public class ManagerCommands {
         commands.put(command.getName(), command);
     }
 
-    public void callCommand(Scanner scanner, String[] commandParts) {
+    public void callCommand(String[] commandParts) {
         String commandName = commandParts[0].toLowerCase();
 
         Command command = commands.get(commandName);
 
         if (command != null) {
             try {
-                command.execute(scanner, commandParts);
+                command.execute(commandParts);
             } catch (Exception e) {
                 System.err.println("Error when executing the command: " + e.getMessage());
             }
@@ -50,13 +50,6 @@ public class ManagerCommands {
             System.err.println("Unidentified command: " + commandName);
             System.err.println("Enter 'help' for reference.");
         }
-    }
-
-    public void printHelp() {
-        System.out.println("Доступные команды:");
-        commands.values().forEach(cmd ->
-                System.out.printf("  %-40s : %s%n", cmd.getName(), cmd.getDescription())
-        );
     }
 
 

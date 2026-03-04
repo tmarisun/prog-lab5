@@ -22,7 +22,7 @@ public class Show implements Command {
     }
 
     @Override
-    public void execute(Scanner scanner, String[] args) {
+    public void execute(String[] args) {
         if (app.getCityStack().isEmpty()) {
             System.out.println("Collection is empty.");
             return;

@@ -20,7 +20,7 @@ import static org.example.validate.InputValidator.*;
 
 public class ConsoleInputHandler {
 
-    public static City readCityFromConsole(Long predefinedId) throws InvalidDataException {
+    public static City readCityFromConsole() throws InvalidDataException {
         Scanner scanner = new Scanner(System.in);
         final int MAX_ATTEMPTS = 100;
         int attempts = 0;
