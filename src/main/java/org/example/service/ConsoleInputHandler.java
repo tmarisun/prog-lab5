@@ -8,10 +8,13 @@ import org.example.data.Government;
 import org.example.data.StandardOfLiving;
 import org.example.validate.CityValidator;
 import org.example.exceptions.InvalidDataException;
+import org.example.validate.InputValidator;
 
-import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Scanner;
+
+import static org.example.validate.InputValidator.*;
 
 public class ConsoleInputHandler {
 
@@ -24,28 +27,25 @@ public class ConsoleInputHandler {
             try {
                 System.out.println("=== Entering city data (attempt " + (attempts + 1) + ") ===");
 
-                String name = readString(scanner, "Enter the name of the city: ");
+                String name = readString(scanner);
 
                 System.out.println("Enter the coordinates:");
-                float x = readFloat(scanner, "  X: ");
-                double y = readDouble(scanner, "  Y: ");
+                float x = readFloat(scanner);
+                double y = readDouble(scanner);
                 Coordinates coordinates = new Coordinates(x, y);
 
-                double area = readDouble(scanner, "Enter the area of the city: ");
-                int population = readInt(scanner, "Enter the city's population: ");
-                int metersAboveSeaLevel = readInt(scanner, "Enter the height above sea level: ");
+                double area = readDoubleArea(scanner);
+                int population = readIntPollution(scanner);
+                int metersAboveSeaLevel = readIntLevel(scanner);
 
-                Climate climate = readEnum(scanner, "Select the climate (Enter to skip): ",
-                        Climate.values(), true);
-                Government government = readEnum(scanner, "Choose a form of government: ",
-                        Government.values(), false);
-                StandardOfLiving standardOfLiving = readEnum(scanner,
-                        "Select the standard of living (Enter to skip): ",
-                        StandardOfLiving.values(), true);
+                Climate climate = readEnumClimate(scanner);
+                Government government = readEnumGovernment(scanner);
+                StandardOfLiving standardOfLiving = readEnumStandard(scanner
+                );
 
                 Human governor = null;
-                if (readYesNo(scanner, "Add a governor? (y/n): ")) {
-                    LocalDate birthday = readDate(scanner, "Введите дату рождения (yyyy-MM-dd): ");
+                if (readYesNo(scanner)) {
+                    java.util.Date birthday = readDate(scanner);
                     governor = new Human(birthday);
                 }
 
@@ -81,65 +81,93 @@ public class ConsoleInputHandler {
     }
 
 
-    private static String readString(Scanner scanner, String prompt) {
-        System.out.print(prompt);
-        return scanner.nextLine().trim();
+    private static String readString(Scanner scanner) throws InvalidDataException {
+        System.out.print("Enter the name of the city: ");
+        String scn = scanner.nextLine().trim();
+        scn = validateName(scn);
+        return scn;
     }
 
-    private static float readFloat(Scanner scanner, String prompt) {
-        System.out.print(prompt);
-        return Float.parseFloat(scanner.nextLine().trim());
+    private static float readFloat(Scanner scanner) throws InvalidDataException {
+        System.out.print("  X: ");
+        String scn = scanner.nextLine().trim();
+        return validateX(scn);
     }
 
-    private static double readDouble(Scanner scanner, String prompt) {
-        System.out.print(prompt);
-        return Double.parseDouble(scanner.nextLine().trim());
+    private static int readIntLevel(Scanner scanner) throws InvalidDataException {
+        System.out.print("Enter the height above sea level: ");
+        String scn = scanner.nextLine().trim();
+        return Integer.parseInt(scn);
     }
 
-    private static int readInt(Scanner scanner, String prompt) {
-        System.out.print(prompt);
-        return Integer.parseInt(scanner.nextLine().trim());
+    private static double readDouble(Scanner scanner) throws InvalidDataException {
+        System.out.print("  Y: ");
+        String scn = scanner.nextLine().trim();
+        return validateY(scn);
     }
 
-    private static <T extends Enum<T>> T readEnum(Scanner scanner, String prompt,
-                                                  T[] values, boolean nullable) {
-        System.out.println(prompt);
-        for (int i = 0; i < values.length; i++) {
-            System.out.printf("  %d. %s%n", i + 1, values[i].name());
-        }
-        if (nullable) {
-            System.out.println("  0. Skip (null)");
-        }
+    private static int readIntPollution(Scanner scanner) throws InvalidDataException {
+        System.out.print("Enter the city's population: ");
+        String scn = scanner.nextLine().trim();
+        return InputValidator.validatePopulation(scn);
+    }
 
-        System.out.print("Your choice: ");
+    private static double readDoubleArea(Scanner scanner) throws InvalidDataException {
+        System.out.println("Enter the area of the city: ");
+        String scn = scanner.nextLine().trim();
+        return InputValidator.validateArea(scn);
+    }
+
+
+    private static Climate readEnumClimate(Scanner scanner) throws InvalidDataException {
+        System.out.println("Available values: " + Arrays.toString(Climate.values()));
+        System.out.println("Select the climate (Enter to skip): ");
+        String climateInput = scanner.nextLine().trim();
+
+        return InputValidator.validateEnum(
+                climateInput.isEmpty() ? null : climateInput,
+                Climate.class,
+                "climate",
+                false
+        );
+    }
+
+    private static Government readEnumGovernment(Scanner scanner) throws InvalidDataException {
+        System.out.println("Available values: " + Arrays.toString(Government.values()));
+        System.out.println("Choose a form of government: ");
+        String govInput = scanner.nextLine().trim();
+
+        return InputValidator.validateEnum(
+                govInput,
+                Government.class,
+                "government",
+                true
+        );
+    }
+
+    private static StandardOfLiving readEnumStandard(Scanner scanner) throws InvalidDataException {
+        System.out.println("Available values: " + Arrays.toString(StandardOfLiving.values()));
+        System.out.print("Select the standard of living (Enter to skip): ");
         String input = scanner.nextLine().trim();
 
-        if (nullable && (input.isEmpty() || input.equals("0"))) {
-            return null;
-        }
+        return InputValidator.validateEnum(
+                input.isEmpty() ? null : input,
+                StandardOfLiving.class,
+                "StandardOfLiving",
+                false
+        );
 
-        try {
-            int index = Integer.parseInt(input) - 1;
-            if (index >= 0 && index < values.length) {
-                return values[index];
-            }
-        } catch (NumberFormatException ignored) {}
-
-        try {
-            return Enum.valueOf((Class<T>) values[0].getClass(), input.toUpperCase());
-        } catch (IllegalArgumentException ignored) {}
-
-        return null;
     }
 
-    private static boolean readYesNo(Scanner scanner, String prompt) {
-        System.out.print(prompt);
+
+    private static boolean readYesNo(Scanner scanner) {
+        System.out.print("Add a governor? (y/n): ");
         String input = scanner.nextLine().trim().toLowerCase();
         return input.equals("y") || input.equals("yes") || input.equals("да");
     }
 
-    private static LocalDate readDate(Scanner scanner, String prompt) {
-        System.out.print(prompt);
-        return LocalDate.parse(scanner.nextLine().trim());
+    private static Date readDate(Scanner scanner) throws InvalidDataException {
+        System.out.print("Введите дату рождения (yyyy-MM-dd): ");
+        return (InputValidator.validateCreationDate(scanner.nextLine().trim()));
     }
 }

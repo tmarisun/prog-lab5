@@ -19,14 +19,9 @@ public class CityValidator {
         InputValidator.validateNotNull(city.getGovernment(), "Government");
 
         CoordinatesValidator.validate(city.getCoordinates());
+
+        InputValidator.validateUniqueIds((Collection<City>) city);
     }
 
-    public static void validateUniqueIds(Collection<City> cities) throws InvalidDataException {
-        Set<Long> ids = new HashSet<>();
-        for (City city : cities) {
-            if (!ids.add(city.getId())) {
-                throw new InvalidDataException("Duplicate ID found: " + city.getId());
-            }
-        }
-    }
+
 }

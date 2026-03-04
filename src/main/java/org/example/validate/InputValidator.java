@@ -3,14 +3,20 @@ package org.example.validate;
 import org.example.data.City;
 import org.example.exceptions.InvalidDataException;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public class InputValidator {
 
     public static void validateUniqueIds(Collection<City> cities) throws InvalidDataException {
-        CityValidator.validateUniqueIds(cities);
+        Set<Long> ids = new HashSet<>();
+        for (City city : cities) {
+            if (!ids.add(city.getId())) {
+                throw new InvalidDataException("Duplicate ID found: " + city.getId());
+            }
+        }
     }
 
     // === Coordinate Constraints ===
@@ -182,13 +188,13 @@ public class InputValidator {
         }
     }
 
-    public static LocalDate validateBirthday(String dateString) throws InvalidDataException {
+    public static long validateBirthday(String dateString) throws InvalidDataException {
         if (dateString == null || dateString.trim().isEmpty()) {
-            return null; // Optional field
+            return 0; // Optional field
         }
 
         try {
-            return LocalDate.parse(dateString.trim());
+            return java.util.Date.parse(dateString.trim());
         } catch (DateTimeParseException e) {
             throw new InvalidDataException("Invalid birthday format. Expected: yyyy-MM-dd");
         }
@@ -196,7 +202,6 @@ public class InputValidator {
 
 
     //---------------
-
 
     public static <T extends Enum<T>> T validateEnum(
             String value,

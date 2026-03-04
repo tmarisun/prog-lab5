@@ -1,6 +1,5 @@
 package org.example.service;
 
-import org.example.exceptions.FileNotFoundException;
 import org.example.exceptions.InvalidDataException;
 import org.example.exceptions.NoRightsException;
 import org.example.data.*;
@@ -10,7 +9,9 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
@@ -96,9 +97,9 @@ public class FileJsonReader {
         Double area = InputValidator.validateArea(jsonCity.getDouble("area"));
         int population = InputValidator.validatePopulation(jsonCity.getInt("population"));
 
-        JSONObject coordJson = jsonCity.getJSONObject("coordinates");
-        float x = coordJson.getFloat("x");
-        double y = coordJson.getFloat("y");
+        JSONObject cordJson = jsonCity.getJSONObject("coordinates");
+        float x = cordJson.getFloat("x");
+        double y = cordJson.getFloat("y");
         InputValidator.validateCoordinates(x, y);
         Coordinates coordinates = new Coordinates(x, y);
 
@@ -116,7 +117,8 @@ public class FileJsonReader {
 
         Climate climate = Climate.valueOf(jsonCity.getString("climate").trim().toUpperCase());
         StandardOfLiving standardOfLiving = StandardOfLiving.valueOf(jsonCity.getString("standardOfLiving").trim().toUpperCase());
-        Human governor = null;
+        Human governor = new Human(creationDate);
+
         int metersAboveSeaLevel = Integer.parseInt(jsonCity.getInt("metersAboveSeaLevel"));
         return new City(id, name, coordinates, creationDate, area, population,
                 metersAboveSeaLevel, climate, government, standardOfLiving, governor);

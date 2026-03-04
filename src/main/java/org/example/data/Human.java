@@ -1,16 +1,15 @@
 package org.example.data;
 
-import java.time.LocalDate;
 
 public class Human {
-    private final LocalDate birthday;
+    private final java.util.Date birthday;
 
-    public Human(LocalDate birthday) {
+    public Human(java.util.Date birthday) {
         if (birthday == null) throw new IllegalArgumentException("Birthday cannot be null");
         this.birthday = birthday;
     }
 
-    public LocalDate getBirthday() { return birthday; }
+    public java.util.Date getBirthday() { return birthday; }
 
     @Override
     public String toString() {
