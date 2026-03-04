@@ -11,13 +11,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 
 
-public class FileJsonReader {
+public class JsonFileLoader {
 
 
 

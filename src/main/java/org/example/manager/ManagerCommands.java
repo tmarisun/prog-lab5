@@ -12,27 +12,22 @@ public class ManagerCommands {
     private Map<String, Command> commands = new HashMap<>();
 
     public ManagerCommands(Application app) {
-        addCommand(new Help(app));
-        addCommand(new Info(app));
-        addCommand(new Show(app));
-        addCommand(new Add(app));
-        addCommand(new Update(app));
-        addCommand(new RemoveById(app));
-        addCommand(new Clear(app));
-        addCommand(new Save(app));
-        addCommand(new ExecuteScript(app, this));
-        addCommand(new Exit(app));
-        addCommand(new InsertAt(app));
-        addCommand(new AddIfMax(app));
-        addCommand(new Sort(app));
-        addCommand(new CountLessThanStandardOfLiving(app));
-        addCommand(new FilterByGovernor(app));
-        addCommand(new PrintFieldAscendingStandardOfLiving(app));
-    }
-
-
-    private void addCommand(Command command) {
-        commands.put(command.getName(), command);
+        commands.put("Help", new Help(app));
+        commands.put("Info", new Info(app));
+        commands.put("Show", new Show(app));
+        commands.put("Add", new Add(app));
+        commands.put("Uodate", new Update(app));
+        commands.put("RemoveById", new RemoveById(app));
+        commands.put("Clear", new Clear(app));
+        commands.put("Save", new Save(app));
+        commands.put("ExecuteScript", new ExecuteScript(app, this));
+        commands.put("Exit", new Exit(app));
+        commands.put("InsertAt", new InsertAt(app));
+        commands.put("AddIfMax", new AddIfMax(app));
+        commands.put("Sort", new Sort(app));
+        commands.put("CountLessThanStandardOfLiving", new CountLessThanStandardOfLiving(app));
+        commands.put("FilterByGovernor", new FilterByGovernor(app));
+        commands.put("PrintFieldAscendingStandardOfLiving", new PrintFieldAscendingStandardOfLiving(app));
     }
 
     public void callCommand(String[] commandParts) {

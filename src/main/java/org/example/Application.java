@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.example.exceptions.NoRightsException;
 import org.example.data.City;
 import org.example.manager.ManagerCommands;
-import org.example.service.FileJsonReader;
+import org.example.service.JsonFileLoader;
 
 import java.io.FileNotFoundException;
 import java.util.Stack;
@@ -20,7 +20,7 @@ public class Application {
 
     public Application(String filename) throws FileNotFoundException, NoRightsException {
         this.fileName = filename;
-        cityStack = FileJsonReader.loadCollection(filename);
+        cityStack = JsonFileLoader.loadCollection(filename);
         this.managerCommands = new ManagerCommands(this);
     }
 

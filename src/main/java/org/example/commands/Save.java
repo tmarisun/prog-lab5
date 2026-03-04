@@ -1,8 +1,7 @@
 package org.example.commands;
 
 import org.example.Application;
-import org.example.service.JsonWriter;
-import java.util.Scanner;
+import org.example.service.JsonFileSaver;
 
 public class Save implements Command {
     private final Application app;
@@ -24,7 +23,7 @@ public class Save implements Command {
     @Override
     public void execute(String[] args) {
         try {
-            JsonWriter.saveCitiesToFile(app.getCityStack(), app.getFileName());
+            JsonFileSaver.saveCitiesToFile(app.getCityStack(), app.getFileName());
             System.out.println("Collection saved to " + app.getFileName());
         } catch (Exception e) {
             System.err.println("Error saving: " + e.getMessage());

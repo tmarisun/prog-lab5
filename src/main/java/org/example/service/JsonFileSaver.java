@@ -13,7 +13,7 @@ import java.util.Stack;
 import java.util.TimeZone;
 
 
-public class JsonWriter {
+public class JsonFileSaver {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
