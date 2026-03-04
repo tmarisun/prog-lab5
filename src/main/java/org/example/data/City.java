@@ -1,5 +1,6 @@
 package org.example.data;
 
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,17 +9,31 @@ import lombok.Setter;
 
 public class City implements Comparable<City>{
 
-    private final Long id;
-    private final String name;
-    private final Coordinates coordinates;
-    private final java.util.Date creationDate;
-    private final Double area;
-    private final int population;
-    private final int metersAboveSeaLevel;
-    private final Climate climate;
-    private final Government government;
-    private final StandardOfLiving standardOfLiving;
-    private final Human governor;
+    private Long id;
+    private String name;
+    private Coordinates coordinates;
+    private java.util.Date creationDate;
+    private Double area;
+    private int population;
+    private int metersAboveSeaLevel;
+    private Climate climate;
+    private Government government;
+    private StandardOfLiving standardOfLiving;
+    private Human governor;
+
+    public City(){
+        this.id = null;
+        this.name = null;
+        this.coordinates = null;
+        this.creationDate = null;
+        this.area = null;
+        this.population = 0;
+        this.metersAboveSeaLevel = 0;
+        this.climate = null;
+        this.government = null;
+        this.standardOfLiving = null;
+        this.governor = null;
+    }
 
     public City(Long id, String name, Coordinates coordinates,
                 java.util.Date creationDate, Double area,

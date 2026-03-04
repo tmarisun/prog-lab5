@@ -18,7 +18,7 @@ public class CityValidator {
         InputValidator.validateNotNull(city.getCreationDate(), "Creation date");
         InputValidator.validateNotNull(city.getGovernment(), "Government");
 
-        CoordinatesValidator.validate(city.getCoordinates());
+        CoordinatesValidator.validateCoordinates(city.getCoordinates());
 
         InputValidator.validateUniqueIds((Collection<City>) city);
     }

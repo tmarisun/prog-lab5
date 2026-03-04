@@ -1,7 +1,7 @@
 package org.example.service;
 
 import org.example.data.City;
-import org.json.JSONArray;
+import org.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedWriter;

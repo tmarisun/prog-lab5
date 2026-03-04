@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.Application;
 import org.example.data.City;
 import org.example.data.Coordinates;
 import org.example.data.Human;
@@ -8,6 +9,7 @@ import org.example.data.Government;
 import org.example.data.StandardOfLiving;
 import org.example.validate.CityValidator;
 import org.example.exceptions.InvalidDataException;
+import org.example.validate.CoordinatesValidator;
 import org.example.validate.InputValidator;
 
 import java.util.Arrays;
@@ -20,87 +22,171 @@ public class ConsoleInputHandler {
 
     public static City readCityFromConsole(Long predefinedId) throws InvalidDataException {
         Scanner scanner = new Scanner(System.in);
-        final int MAX_ATTEMPTS = 3;
+        final int MAX_ATTEMPTS = 100;
         int attempts = 0;
+        City city = new City();
 
-        while (attempts < MAX_ATTEMPTS) {
+        while(attempts < MAX_ATTEMPTS) {
+            System.out.println("Entering city data (attempt " + (attempts + 1) + ") ===");
             try {
-                System.out.println("=== Entering city data (attempt " + (attempts + 1) + ") ===");
+                city.setName(readName(scanner));
+                break;
+            }
+            catch(InvalidDataException e) {
+                System.err.println("Error validation: " + e.getMessage());
+                System.out.println("Try to enter the data again.\n");
+                attempts++;
+            }
+        }
 
-                String name = readString(scanner);
-
-                System.out.println("Enter the coordinates:");
-                float x = readFloat(scanner);
-                double y = readDouble(scanner);
+        while(attempts < MAX_ATTEMPTS) {
+            System.out.println("Enter the coordinates:");
+            try {
+                float x = readCoordinateX(scanner);
+                double y = readCoordinateY(scanner);
                 Coordinates coordinates = new Coordinates(x, y);
+                CoordinatesValidator.validateCoordinates(coordinates);
+                city.setCoordinates(coordinates);
+                break;
+            }
+            catch(InvalidDataException e) {
+                System.err.println("Error validation: " + e.getMessage());
+                System.out.println("Try to enter the data again.\n");
+                attempts++;
+            }
+        }
 
+        while(attempts < MAX_ATTEMPTS) {
+            try {
                 double area = readDoubleArea(scanner);
+                InputValidator.validateArea(area);
+                city.setArea(area);
+                break;
+            }
+            catch(InvalidDataException e) {
+                System.err.println("Error validation: " + e.getMessage());
+                System.out.println("Try to enter the data again.\n");
+                attempts++;
+            }
+        }
+
+        while(attempts < MAX_ATTEMPTS) {
+            try{
                 int population = readIntPollution(scanner);
-                int metersAboveSeaLevel = readIntLevel(scanner);
+                InputValidator.validatePopulation(population);
+                city.setPopulation(population);
+                break;
+            }
+            catch(InvalidDataException e) {
+                System.err.println("Error validation: " + e.getMessage());
+                System.out.println("Try to enter the data again.\n");
+                attempts++;
+            }
+        }
 
+        while(attempts < MAX_ATTEMPTS){
+            try{
                 Climate climate = readEnumClimate(scanner);
-                Government government = readEnumGovernment(scanner);
-                StandardOfLiving standardOfLiving = readEnumStandard(scanner
-                );
+                city.setClimate(climate);
+                break;
+            }
+            catch(InvalidDataException e) {
+                System.err.println("Error validation: " + e.getMessage());
+                System.out.println("Try to enter the data again.\n");
+                attempts++;
+            }
+        }
 
+        while(attempts < MAX_ATTEMPTS){
+            try{
+                int metersAboveSeaLevel = readSeaLevel(scanner);
+                city.setMetersAboveSeaLevel(metersAboveSeaLevel);
+                break;
+            }
+            catch(InvalidDataException e) {
+                System.err.println("Error validation: " + e.getMessage());
+                System.out.println("Try to enter the data again.\n");
+                attempts++;
+            }
+        }
+
+        while(attempts < MAX_ATTEMPTS){
+            try {
+                Government government = readEnumGovernment(scanner);
+                city.setGovernment(government);
+                break;
+            }
+            catch(InvalidDataException e) {
+                System.err.println("Error validation: " + e.getMessage());
+                System.out.println("Try to enter the data again.\n");
+                attempts++;
+            }
+
+        }
+
+        while(attempts < MAX_ATTEMPTS){
+            try{
+                StandardOfLiving standardOfLiving = readEnumStandard(scanner);
+                city.setStandardOfLiving(standardOfLiving);
+                break;
+            }
+            catch(InvalidDataException e) {
+                System.err.println("Error validation: " + e.getMessage());
+                System.out.println("Try to enter the data again.\n");
+                attempts++;
+            }
+        }
+
+        while(attempts < MAX_ATTEMPTS){
+            try{
                 Human governor = null;
                 if (readYesNo(scanner)) {
                     java.util.Date birthday = readDate(scanner);
                     governor = new Human(birthday);
                 }
-
-                long id = (predefinedId != null) ? predefinedId : System.currentTimeMillis();
-                Date creationDate = new Date();
-
-                City city = new City(id, name, coordinates, creationDate, area, population,
-                        metersAboveSeaLevel, climate, government, standardOfLiving, governor);
-
-                CityValidator.validateCity(city);
-
-                System.out.println("The data is accepted!");
-                return city;
-
-            } catch (InvalidDataException e) {
-                attempts++;
+                city.setGovernor(governor);
+                break;
+            }
+            catch(InvalidDataException e) {
                 System.err.println("Error validation: " + e.getMessage());
-                if (attempts < MAX_ATTEMPTS) {
-                    System.out.println("Try to enter the data again.\n");
-                } else {
-                    throw new InvalidDataException("Exceeded the number of input attempts");
-                }
-            } catch (Exception e) {
+                System.out.println("Try to enter the data again.\n");
                 attempts++;
-                System.err.println("Error: " + e.getMessage());
-                if (attempts >= MAX_ATTEMPTS) {
-                    throw new InvalidDataException("Couldn't enter correct data");
-                }
             }
         }
 
-        throw new InvalidDataException("Unknown input error");
+        long id = Application.getNextId();
+        city.setId(id);
+
+        if(attempts == MAX_ATTEMPTS) {
+            System.out.println("You've used a lot of input attempts, repeat after 10 minutes.");
+            Runtime.getRuntime().exit(0);
+        }
+
+        System.out.println("The data is accepted!");
+        return city;
     }
 
 
-    private static String readString(Scanner scanner) throws InvalidDataException {
+    private static String readName(Scanner scanner) throws InvalidDataException {
         System.out.print("Enter the name of the city: ");
         String scn = scanner.nextLine().trim();
         scn = validateName(scn);
         return scn;
     }
 
-    private static float readFloat(Scanner scanner) throws InvalidDataException {
+    private static float readCoordinateX(Scanner scanner) throws InvalidDataException {
         System.out.print("  X: ");
         String scn = scanner.nextLine().trim();
         return validateX(scn);
     }
 
-    private static int readIntLevel(Scanner scanner) throws InvalidDataException {
+    private static int readSeaLevel(Scanner scanner) throws InvalidDataException {
         System.out.print("Enter the height above sea level: ");
         String scn = scanner.nextLine().trim();
         return Integer.parseInt(scn);
     }
 
-    private static double readDouble(Scanner scanner) throws InvalidDataException {
+    private static double readCoordinateY(Scanner scanner) throws InvalidDataException {
         System.out.print("  Y: ");
         String scn = scanner.nextLine().trim();
         return validateY(scn);
@@ -117,7 +203,6 @@ public class ConsoleInputHandler {
         String scn = scanner.nextLine().trim();
         return InputValidator.validateArea(scn);
     }
-
 
     private static Climate readEnumClimate(Scanner scanner) throws InvalidDataException {
         System.out.println("Available values: " + Arrays.toString(Climate.values()));
@@ -158,7 +243,6 @@ public class ConsoleInputHandler {
         );
 
     }
-
 
     private static boolean readYesNo(Scanner scanner) {
         System.out.print("Add a governor? (y/n): ");

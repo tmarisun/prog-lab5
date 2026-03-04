@@ -12,7 +12,7 @@ import java.util.Stack;
 public class Application {
 
     @Getter
-    private Stack<City> cityStack;
+    private static Stack<City> cityStack;
     @Getter
     private String fileName;
     @Getter
@@ -20,14 +20,11 @@ public class Application {
 
     public Application(String filename) throws FileNotFoundException, NoRightsException {
         this.fileName = filename;
-        this.cityStack = FileJsonReader.reloadCollection(filename);
+        cityStack = FileJsonReader.reloadCollection(filename);
         this.managerCommands = new ManagerCommands(this);
     }
 
-
-
-
-    public long getNextId() {
+    public static long getNextId() {
         return cityStack.stream()
                 .mapToLong(City::getId)
                 .max()
