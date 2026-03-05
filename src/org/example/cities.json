@@ -1,0 +1,56 @@
+[
+    {
+      "id": "1",
+      "name": "Moscow",
+      "coordinates": {
+        "x": 123.45,
+        "y": 456.78
+      },
+      "creationDate": "2024-01-15T12:30:00",
+      "area": "2511.00",
+      "population": "12655050",
+      "metersAboveSeaLevel": "156",
+      "climate": "HUMIDSUBTROPICAL",
+      "government": "OLIGARCHY",
+      "standardOfLiving": "HIGH",
+      "governor": {
+        "birthday": "1980-05-20T00:00:00"
+      }
+    },
+    {
+      "id": "2",
+      "name": "Saint Petersburg",
+      "coordinates": {
+        "x": 321.0,
+        "y": 512.0
+      },
+      "creationDate": "2023-06-10T09:15:30",
+      "area": "1439.00",
+      "population": "5384000",
+      "metersAboveSeaLevel": "3",
+      "climate": "MEDITERRANIAN",
+      "government": "COMMUNISM",
+      "standardOfLiving": "MEDIUM",
+      "governor": {
+        "birthday": "1975-11-02T00:00:00"
+      }
+    },
+    {
+      "id": "3",
+      "name": "SmallTown",
+      "coordinates": {
+        "x": 10.5,
+        "y": 100.0
+      },
+      "creationDate": "2022-09-01T08:00:00",
+      "area": "50.5",
+      "population": "15000",
+      "metersAboveSeaLevel": "25",
+      "climate": "SUBARCTIC",
+      "government": "KLEPTOCRACY",
+      "standardOfLiving": "LOW",
+      "governor": {
+        "birthday": "1990-03-15T00:00:00"
+      }
+    }
+  ]
