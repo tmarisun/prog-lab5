@@ -1,0 +1,6 @@
+# Script 4: run add, show, remove, show
+execute_script script_add.txt
+execute_script script_show.txt
+execute_script script_remove.txt
+execute_script script_show.txt
+
