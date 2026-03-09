@@ -12,34 +12,40 @@ public class ManagerCommands {
     private final Map<String, Command> commands = new HashMap<>();
 
     public ManagerCommands(Application app) {
-        commands.put("Help", new Help(app));
-        commands.put("Info", new Info(app));
-        commands.put("Show", new Show(app));
-        commands.put("Add", new Add(app));
-        commands.put("Update", new Update(app));
-        commands.put("RemoveById", new RemoveById(app));
-        commands.put("Clear", new Clear(app));
-        commands.put("Save", new Save(app));
-        commands.put("ExecuteScript", new ExecuteScript(app, this));
-        commands.put("Exit", new Exit(app));
-        commands.put("InsertAt", new InsertAt(app));
-        commands.put("AddIfMax", new AddIfMax(app));
-        commands.put("Sort", new Sort(app));
-        commands.put("CountLessThanStandardOfLiving", new CountLessThanStandardOfLiving(app));
-        commands.put("FilterByGovernor", new FilterByGovernor(app));
-        commands.put("PrintFieldAscendingStandardOfLiving", new PrintFieldAscendingStandardOfLiving(app));
+        register(new Help(app, this));
+        register(new Info(app));
+        register(new Show(app));
+        register(new Add(app));
+        register(new Update(app));
+        register(new RemoveById(app));
+        register(new Clear(app));
+        register(new Save(app));
+        register(new ExecuteScript(app, this));
+        register(new Exit(app));
+        register(new InsertAt(app));
+        register(new AddIfMax(app));
+        register(new Sort(app));
+        register(new CountLessThanStandardOfLiving(app));
+        register(new FilterByGovernor(app));
+        register(new PrintFieldAscendingStandardOfLiving(app));
+    }
+
+    private void register(Command command) {
+        commands.put(command.getName().toLowerCase(), command);
+    }
+
+    public Iterable<Command> getAllCommands() {
+        return commands.values();
     }
 
     public void callCommand(String[] commandParts) {
-        for (String value : commands.keySet()) {
-            System.out.println(value);
+        if (commandParts.length == 0) {
+            return;
         }
-        System.out.println(commandParts[0]);
 
-        String commandName = commandParts[0];
-
+        String commandName = commandParts[0].toLowerCase();
         Command command = commands.get(commandName);
-        System.out.println(command);
+
         if (command != null) {
             try {
                 command.execute(commandParts);

@@ -1,14 +1,15 @@
 package org.example.commands;
 
 import org.example.Application;
-
-import java.util.Scanner;
+import org.example.manager.ManagerCommands;
 
 public class Help implements Command {
     private final Application app;
+    private final ManagerCommands manager;
 
-    public Help(Application app) {
+    public Help(Application app, ManagerCommands manager) {
         this.app = app;
+        this.manager = manager;
     }
 
     @Override
@@ -23,25 +24,14 @@ public class Help implements Command {
 
     @Override
     public void execute(String[] args) {
-        System.out.println("""
-        Available commands:
-        help                                            : Show this help message
-        info                                            : Show information about the collection
-        show                                            : Show all elements of the collection
-        add                                             : Add a new element to the collection
-        update id {element}                             : Update an element by its ID
-        remove_by_id id                                 : Remove an element by its ID
-        clear                                           : Clear the collection
-        save                                            : Save the collection to a file
-        execute_script file_name                        : Execute a script from a file
-        exit                                            : Exit the program (without saving)
-        insert_at index {element}                       : Insert an element at the specified position
-        add_if_max {element}                            : Add an element if its value is greater than the maximum
-        sort                                            : Sort the collection in natural order
-        count_less_than_standard_of_living value        : Count elements with standardOfLiving less than the specified value
-        filter_by_governor birthday                     : Filter elements by governor's birthday
-        print_field_ascending_standard_of_living        : Print standardOfLiving values in ascending order
-        """);
+        if (args.length > 1) {
+            System.err.println("Command 'help' does not accept any arguments.");
+            return;
+        }
 
+        System.out.println("Available commands:");
+        for (Command command : manager.getAllCommands()) {
+            System.out.printf("  %-40s : %s%n", command.getName(), command.getDescription());
+        }
     }
 }

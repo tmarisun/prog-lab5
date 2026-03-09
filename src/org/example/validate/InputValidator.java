@@ -188,14 +188,16 @@ public class InputValidator {
         }
     }
 
-    public static long validateBirthday(String dateString) throws InvalidDataException {
+    public static java.util.Date validateBirthday(String dateString) throws InvalidDataException {
         if (dateString == null || dateString.trim().isEmpty()) {
-            return 0; // Optional field
+            throw new InvalidDataException("Birthday cannot be empty");
         }
 
         try {
-            return java.util.Date.parse(dateString.trim());
-        } catch (DateTimeParseException e) {
+            java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            format.setLenient(false);
+            return format.parse(dateString.trim());
+        } catch (Exception e) {
             throw new InvalidDataException("Invalid birthday format. Expected: yyyy-MM-dd");
         }
     }

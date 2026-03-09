@@ -101,7 +101,7 @@ public class JsonFileLoader {
                 jsonCity.getString("creationDate")
         );
 
-        // Enum
+        // Enum fields
         Government government = InputValidator.validateEnum(
                 jsonCity.getString("government"),
                 Government.class,
@@ -109,9 +109,33 @@ public class JsonFileLoader {
                 true
         );
 
-        Climate climate = Climate.valueOf(jsonCity.getString("climate").trim().toUpperCase());
-        StandardOfLiving standardOfLiving = StandardOfLiving.valueOf(jsonCity.getString("standardOfLiving").trim().toUpperCase());
-        Human governor = new Human(creationDate);
+        String climateRaw = jsonCity.has("climate") && !jsonCity.isNull("climate")
+                ? jsonCity.getString("climate")
+                : null;
+        Climate climate = InputValidator.validateEnum(
+                climateRaw,
+                Climate.class,
+                "climate",
+                false
+        );
+
+        String solRaw = jsonCity.has("standardOfLiving") && !jsonCity.isNull("standardOfLiving")
+                ? jsonCity.getString("standardOfLiving")
+                : null;
+        StandardOfLiving standardOfLiving = InputValidator.validateEnum(
+                solRaw,
+                StandardOfLiving.class,
+                "standardOfLiving",
+                false
+        );
+
+        Human governor = null;
+        if (jsonCity.has("governor") && !jsonCity.isNull("governor")) {
+            JSONObject govJson = jsonCity.getJSONObject("governor");
+            String birthdayStr = govJson.optString("birthday", null);
+            java.util.Date birthday = InputValidator.validateBirthday(birthdayStr);
+            governor = new Human(birthday);
+        }
 
         int metersAboveSeaLevel = Integer.parseInt(jsonCity.getString("metersAboveSeaLevel"));
         return new City(id, name, coordinates, creationDate, area, population,

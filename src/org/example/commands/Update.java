@@ -4,6 +4,7 @@ import org.example.Application;
 import org.example.data.City;
 import org.example.exceptions.InvalidDataException;
 import org.example.service.ConsoleInputHandler;
+import org.example.service.JsonCityReader;
 import org.example.validate.InputValidator;
 
 import java.util.Stack;
@@ -28,12 +29,13 @@ public class Update implements Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 2) {
-            System.err.println("Usage: update <id>");
+            System.err.println("Usage: update <id> [city.json]");
             return;
         }
 
         try {
-            long id = Long.parseLong(args[1]);
+            String[] tokens = args[1].trim().split("\\s+");
+            long id = Long.parseLong(tokens[0]);
             InputValidator.validateId(id);
 
             Stack<City> CityStack = app.getCityStack();
@@ -51,10 +53,25 @@ public class Update implements Command {
                 return;
             }
 
-            City newCity = ConsoleInputHandler.readCityFromConsole();
-            CityStack.remove(found);
-            CityStack.push(newCity);
-            System.out.println("City updated successfully.");
+            City newCity;
+            if (tokens.length >= 2 && tokens[1].toLowerCase().endsWith(".json")) {
+                newCity = JsonCityReader.readSingleCity(tokens[1]);
+            } else {
+                newCity = ConsoleInputHandler.readCityFromConsole();
+            }
+
+            found.setName(newCity.getName());
+            found.setCoordinates(newCity.getCoordinates());
+            found.setCreationDate(newCity.getCreationDate());
+            found.setArea(newCity.getArea());
+            found.setPopulation(newCity.getPopulation());
+            found.setMetersAboveSeaLevel(newCity.getMetersAboveSeaLevel());
+            found.setClimate(newCity.getClimate());
+            found.setGovernment(newCity.getGovernment());
+            found.setStandardOfLiving(newCity.getStandardOfLiving());
+            found.setGovernor(newCity.getGovernor());
+
+            System.out.println("City updated successfully (element kept in collection, id preserved).");
 
         } catch (NumberFormatException | InvalidDataException e) {
             System.err.println("Invalid ID format.");

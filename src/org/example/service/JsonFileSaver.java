@@ -16,6 +16,7 @@ import java.util.TimeZone;
 public class JsonFileSaver {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    private static final SimpleDateFormat BIRTHDAY_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     static {
         DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -60,7 +61,7 @@ public class JsonFileSaver {
 
         if (city.getGovernor() != null) {
             JSONObject govJson = new JSONObject();
-            govJson.put("birthday", city.getGovernor().birthday().toString());
+            govJson.put("birthday", BIRTHDAY_FORMAT.format(city.getGovernor().birthday()));
             json.put("governor", govJson);
         }
 

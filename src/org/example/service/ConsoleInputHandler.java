@@ -245,12 +245,14 @@ public class ConsoleInputHandler {
 
     private static boolean readYesNo(Scanner scanner) {
         System.out.print("Add a governor? (y/n): ");
-        String input = scanner.nextLine().trim().toLowerCase();
-        return input.equals("y") || input.equals("yes") || input.equals("да");
+        String input = scanner.nextLine().trim();
+        return input.equalsIgnoreCase("y")
+                || input.equalsIgnoreCase("yes")
+                || input.equalsIgnoreCase("да");
     }
 
     private static Date readDate(Scanner scanner) throws InvalidDataException {
         System.out.print("Введите дату рождения (yyyy-MM-dd): ");
-        return (InputValidator.validateCreationDate(scanner.nextLine().trim()));
+        return InputValidator.validateBirthday(scanner.nextLine().trim());
     }
 }

@@ -3,7 +3,9 @@ package org.example.commands;
 import org.example.Application;
 import org.example.data.City;
 import org.example.data.Human;
-import java.time.LocalDate;
+import org.example.validate.InputValidator;
+
+import java.text.SimpleDateFormat;
 import java.util.Stack;
 
 public class FilterByGovernor implements Command {
@@ -31,13 +33,15 @@ public class FilterByGovernor implements Command {
         }
 
         try {
-            LocalDate birthday = LocalDate.parse(args[1].trim());
+            java.util.Date birthday = InputValidator.validateBirthday(args[1].trim());
+            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
             Stack<City> stack = app.getCityStack();
             boolean found = false;
 
             for (City city : stack) {
                 Human governor = city.getGovernor();
-                if (governor != null && governor.birthday().equals(birthday)) {
+                if (governor != null
+                        && fmt.format(governor.birthday()).equals(fmt.format(birthday))) {
                     System.out.println(city);
                     found = true;
                 }
