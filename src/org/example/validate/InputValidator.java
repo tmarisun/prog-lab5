@@ -57,13 +57,12 @@ public class InputValidator {
 
     //----------------
 
-    public static Float validateX(String xString) throws InvalidDataException {
-        if (xString == null || xString.trim().isEmpty()) {
+    public static Float validateX(Float x) throws InvalidDataException {
+        if (x == null) {
             throw new InvalidDataException("X coordinate cannot be empty");
         }
 
         try {
-            float x = Float.parseFloat(xString.trim());
             if (x > MAX_X) {
                 throw new InvalidDataException(
                         "X coordinate cannot exceed " + MAX_X + " (received: " + x + ")"
@@ -75,13 +74,12 @@ public class InputValidator {
         }
     }
 
-    public static Double validateY(String yString) throws InvalidDataException {
-        if (yString == null || yString.trim().isEmpty()) {
+    public static Double validateY(Double y) throws InvalidDataException {
+        if (y == null) {
             throw new InvalidDataException("Y coordinate cannot be empty");
         }
 
         try {
-            double y = Double.parseDouble(yString.trim());
             if (y > MAX_Y) {
                 throw new InvalidDataException(
                         "Y coordinate cannot exceed " + MAX_Y + " (received: " + y + ")"
@@ -110,28 +108,20 @@ public class InputValidator {
 
 
 
-    public static Integer validatePopulation(String popString) throws InvalidDataException {
-        if (popString == null || popString.trim().isEmpty()) {
+    public static void validatePopulation(Integer population) throws InvalidDataException {
+        if (population == null) {
             throw new InvalidDataException("Population cannot be empty");
         }
 
         try {
-            int population = Integer.parseInt(popString.trim());
             if (population <= MIN_POPULATION) {
                 throw new InvalidDataException("Population must be greater than 0 (received: " + population + ")");
             }
-            return population;
         } catch (NumberFormatException e) {
             throw new InvalidDataException("Population must be a valid integer number");
         }
     }
 
-
-    public static void validatePopulation(int population) throws InvalidDataException {
-        if (population <= MIN_POPULATION) {
-            throw new InvalidDataException("Population must be greater than 0 (received: " + population + ")");
-        }
-    }
 
     //-----------------------------
 
@@ -194,11 +184,11 @@ public class InputValidator {
         }
 
         try {
-            java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             format.setLenient(false);
             return format.parse(dateString.trim());
         } catch (Exception e) {
-            throw new InvalidDataException("Invalid birthday format. Expected: yyyy-MM-dd");
+            throw new InvalidDataException("Invalid birthday format. Expected: yyyy-MM-dd'T'HH:mm:ss");
         }
     }
 

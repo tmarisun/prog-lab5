@@ -3,17 +3,13 @@ package org.example.commands;
 import org.example.Application;
 import org.example.data.City;
 import org.example.data.StandardOfLiving;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Stack;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PrintFieldAscendingStandardOfLiving implements Command {
-    private final Application app;
 
     public PrintFieldAscendingStandardOfLiving(Application app) {
-        this.app = app;
     }
 
     @Override
@@ -28,13 +24,13 @@ public class PrintFieldAscendingStandardOfLiving implements Command {
 
     @Override
     public void execute(String[] args) {
-        Stack<City> stack = app.getCityStack();
+        Stack<City> stack = Application.getCityStack();
 
         List<StandardOfLiving> values = stack.stream()
                 .map(City::getStandardOfLiving)
-                .filter(sol -> sol != null)
+                .filter(Objects::nonNull)
                 .sorted(Comparator.comparingInt(StandardOfLiving::getRank))
-                .collect(Collectors.toList());
+                .toList();
 
         if (values.isEmpty()) {
             System.out.println("No standard of living values available.");

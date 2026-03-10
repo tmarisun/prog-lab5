@@ -5,10 +5,8 @@ import java.util.Collections;
 import java.util.Scanner;
 
 public class Sort implements Command {
-    private final Application app;
 
     public Sort(Application app) {
-        this.app = app;
     }
 
     @Override
@@ -23,7 +21,7 @@ public class Sort implements Command {
 
     @Override
     public void execute(String[] args) {
-        Collections.sort(app.getCityStack());
+        Collections.sort(Application.getCityStack());
         System.out.println("Collection sorted by ID (natural order).");
     }
 }

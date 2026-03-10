@@ -23,7 +23,7 @@ public class Save implements Command {
     @Override
     public void execute(String[] args) {
         try {
-            JsonFileSaver.saveCitiesToFile(app.getCityStack(), app.getFileName());
+            JsonFileSaver.saveCitiesToFile(Application.getCityStack(), app.getFileName());
             System.out.println("Collection saved to " + app.getFileName());
         } catch (Exception e) {
             System.err.println("Error saving: " + e.getMessage());

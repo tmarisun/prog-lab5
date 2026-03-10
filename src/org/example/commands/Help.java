@@ -1,15 +1,18 @@
 package org.example.commands;
 
 import org.example.Application;
-import org.example.manager.ManagerCommands;
+
+import java.io.FileNotFoundException;
+import java.util.List;
+import java.util.Map;
 
 public class Help implements Command {
     private final Application app;
-    private final ManagerCommands manager;
+    public final Map<String, Command> commands;
 
-    public Help(Application app, ManagerCommands manager) {
+    public Help(Application app, Map<String, Command> commands) {
         this.app = app;
-        this.manager = manager;
+        this.commands = commands;
     }
 
     @Override
@@ -23,15 +26,13 @@ public class Help implements Command {
     }
 
     @Override
-    public void execute(String[] args) {
-        if (args.length > 1) {
-            System.err.println("Command 'help' does not accept any arguments.");
-            return;
-        }
+    public void execute(String[] args) throws FileNotFoundException {
 
-        System.out.println("Available commands:");
-        for (Command command : manager.getAllCommands()) {
-            System.out.printf("  %-40s : %s%n", command.getName(), command.getDescription());
-        }
     }
+
+    public void execute(List<String> args) {
+        if (args != null) throw new IllegalArgumentException("Command 'help' does not accept any arguments.");
+        app.help(this.commands);
+    }
+
 }

@@ -4,10 +4,8 @@ import org.example.Application;
 import java.util.Scanner;
 
 public class Clear implements Command {
-    private final Application app;
 
     public Clear(Application app) {
-        this.app = app;
     }
 
     @Override
@@ -22,7 +20,7 @@ public class Clear implements Command {
 
     @Override
     public void execute(String[] args) {
-        app.getCityStack().clear();
+        Application.getCityStack().clear();
         System.out.println("Collection cleared.");
     }
 }

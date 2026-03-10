@@ -1,10 +1,10 @@
 package org.example.commands;
 
 import org.example.Application;
-import org.example.service.ConsoleInputHandler;
-import org.example.service.JsonCityReader;
+import org.example.service.CityReader;
 import org.example.data.City;
-import java.util.Scanner;
+import org.example.validate.CityValidator;
+
 import java.util.Stack;
 
 public class InsertAt implements Command {
@@ -34,26 +34,16 @@ public class InsertAt implements Command {
         try {
             String[] tokens = args[1].trim().split("\\s+");
             int index = Integer.parseInt(tokens[0]);
-            Stack<City> stack = app.getCityStack();
+            Stack<City> stack = Application.getCityStack();
 
             if (index < 0 || index > stack.size()) {
                 System.err.println("Index must be between 0 and " + stack.size());
                 return;
             }
 
-            City city;
-            if (tokens.length >= 2 && tokens[1].toLowerCase().endsWith(".json")) {
-                city = JsonCityReader.readSingleCity(tokens[1]);
+            City city = CityReader.readCity();
+            CityValidator.validateCity(city);
 
-                boolean idExists = Application.getCityStack().stream()
-                        .anyMatch(c -> c.getId().equals(city.getId()));
-                if (idExists) {
-                    System.err.println("Cannot insert city: ID " + city.getId() + " already exists in the collection.");
-                    return;
-                }
-            } else {
-                city = ConsoleInputHandler.readCityFromConsole();
-            }
             stack.add(index, city);
             System.out.println("City inserted at position " + index);
 

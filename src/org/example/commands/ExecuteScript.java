@@ -1,7 +1,9 @@
 package org.example.commands;
 
 import org.example.Application;
+import org.example.Scene;
 import org.example.manager.ManagerCommands;
+import org.example.service.CityReader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,7 +33,7 @@ public class ExecuteScript implements Command {
     }
 
     @Override
-    public void execute(String[] args) {
+    public void execute(String[] args) throws FileNotFoundException {
         if (args.length < 2) {
             System.err.println("Usage: execute_script <file_name>");
             return;
@@ -58,32 +60,9 @@ public class ExecuteScript implements Command {
         }
 
         executingScripts.add(absolutePath);
-
-        try (Scanner fileScanner = new Scanner(file, "UTF-8")) {
-            System.out.println("Executing script: " + fileName);
-
-            while (fileScanner.hasNextLine()) {
-                String line = fileScanner.nextLine().trim();
-
-                if (line.isEmpty() || line.startsWith("#")) {
-                    continue;
-                }
-
-                System.out.println("$ " + line);
-
-                String[] commandParts = line.split("\\s+", 2);
-
-                managerCommands.callCommand(commandParts);
-            }
-
-            System.out.println("Script execution completed: " + fileName);
-
-        } catch (FileNotFoundException e) {
-            System.err.println("Script file not found: " + fileName);
-        } catch (Exception e) {
-            System.err.println("Error executing script: " + e.getMessage());
-        } finally {
-            executingScripts.remove(absolutePath);
-        }
+        Scanner fileScanner = new Scanner(file, "UTF-8");
+        CityReader.setScanner(fileScanner);
+        Scene.run();
+        CityReader.setScanner(new Scanner(System.in));
     }
 }

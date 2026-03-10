@@ -7,10 +7,8 @@ import java.util.Scanner;
 import java.util.Stack;
 
 public class CountLessThanStandardOfLiving implements Command {
-    private final Application app;
 
     public CountLessThanStandardOfLiving(Application app) {
-        this.app = app;
     }
 
     @Override
@@ -32,7 +30,7 @@ public class CountLessThanStandardOfLiving implements Command {
 
         try {
             StandardOfLiving threshold = StandardOfLiving.valueOf(args[1].trim().toUpperCase());
-            Stack<City> stack = app.getCityStack();
+            Stack<City> stack = Application.getCityStack();
             int count = 0;
 
             for (City city : stack) {

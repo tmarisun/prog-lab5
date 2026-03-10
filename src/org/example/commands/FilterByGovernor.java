@@ -9,10 +9,8 @@ import java.text.SimpleDateFormat;
 import java.util.Stack;
 
 public class FilterByGovernor implements Command {
-    private final Application app;
 
     public FilterByGovernor(Application app) {
-        this.app = app;
     }
 
     @Override
@@ -35,7 +33,7 @@ public class FilterByGovernor implements Command {
         try {
             java.util.Date birthday = InputValidator.validateBirthday(args[1].trim());
             SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-            Stack<City> stack = app.getCityStack();
+            Stack<City> stack = Application.getCityStack();
             boolean found = false;
 
             for (City city : stack) {

@@ -31,7 +31,6 @@ sourceSets {
 
 dependencies {
     implementation 'org.json:json:20231013'
-    testImplementation 'junit:junit:4.13.2'
 
     compileOnly 'org.projectlombok:lombok:1.18.32'
     annotationProcessor 'org.projectlombok:lombok:1.18.32'
@@ -40,6 +39,10 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    //implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
+
 }
 
 application {
@@ -55,6 +58,7 @@ tasks.test {
 }
 
 tasks.named('run') {
+    args = ['cities.json']
     // Пробрасываем stdin Gradle-задаче run, чтобы Scanner(System.in) был интерактивным
     standardInput = System.in
 }

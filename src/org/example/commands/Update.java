@@ -3,8 +3,8 @@ package org.example.commands;
 import org.example.Application;
 import org.example.data.City;
 import org.example.exceptions.InvalidDataException;
-import org.example.service.ConsoleInputHandler;
-import org.example.service.JsonCityReader;
+import org.example.service.CityReader;
+import org.example.validate.CityValidator;
 import org.example.validate.InputValidator;
 
 import java.util.Stack;
@@ -38,7 +38,7 @@ public class Update implements Command {
             long id = Long.parseLong(tokens[0]);
             InputValidator.validateId(id);
 
-            Stack<City> CityStack = app.getCityStack();
+            Stack<City> CityStack = Application.getCityStack();
             City found = null;
 
             for (City city : CityStack) {
@@ -53,12 +53,8 @@ public class Update implements Command {
                 return;
             }
 
-            City newCity;
-            if (tokens.length >= 2 && tokens[1].toLowerCase().endsWith(".json")) {
-                newCity = JsonCityReader.readSingleCity(tokens[1]);
-            } else {
-                newCity = ConsoleInputHandler.readCityFromConsole();
-            }
+            City newCity = CityReader.readCity();
+            CityValidator.validateCity(newCity);
 
             found.setName(newCity.getName());
             found.setCoordinates(newCity.getCoordinates());
