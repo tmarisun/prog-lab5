@@ -1,3 +1,2 @@
-# Script 2: show collection
 show
 

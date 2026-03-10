@@ -19,7 +19,7 @@ public class Scene {
 
     public static void run() {
         System.out.println("The program is running. Enter 'help' for help.");
-        while (CityReader.scanner.hasNext()) {
+        while (true) {
             System.out.print("> ");
             String line;
             try {

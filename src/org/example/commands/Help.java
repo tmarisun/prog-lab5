@@ -8,11 +8,9 @@ import java.util.Map;
 
 public class Help implements Command {
     private final Application app;
-    public final Map<String, Command> commands;
 
-    public Help(Application app, Map<String, Command> commands) {
+    public Help(Application app) {
         this.app = app;
-        this.commands = commands;
     }
 
     @Override
@@ -27,12 +25,10 @@ public class Help implements Command {
 
     @Override
     public void execute(String[] args) throws FileNotFoundException {
+       // System.out.println(args);
+        //if (args != null) throw new IllegalArgumentException("Command 'help' does not accept any arguments.");
 
-    }
-
-    public void execute(List<String> args) {
-        if (args != null) throw new IllegalArgumentException("Command 'help' does not accept any arguments.");
-        app.help(this.commands);
+        app.help();
     }
 
 }

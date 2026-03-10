@@ -1,3 +1,2 @@
-# Script 3: remove previously added ScriptCity with id 10
 remove_by_id 10
 

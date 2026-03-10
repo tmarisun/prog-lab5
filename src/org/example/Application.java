@@ -14,6 +14,8 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Stack;
 
+import static org.example.validate.InputValidator.validateUniqueIds;
+
 public class Application {
 
     @Getter
@@ -29,8 +31,12 @@ public class Application {
         for (City city : cityStack) {
             CityValidator.validateCity(city);
         }
-
+        validateUniqueIds(cityStack);
         this.managerCommands = new ManagerCommands(this);
+    }
+
+    public static long getSize() {
+        return cityStack.size();
     }
 
     public static long getNextId() {
@@ -44,8 +50,9 @@ public class Application {
         cityStack.push(city);
     }
 
-    public void help(Map<String, Command> commands){
+    public void help(){
         System.out.println("The list of commands available to you: ");
+        Map<String, Command> commands = managerCommands.getCommands();
         for (Map.Entry<String, Command> entry : commands.entrySet()) {
             Command value = entry.getValue();
             System.out.println(value.getDescription());

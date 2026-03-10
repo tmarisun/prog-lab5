@@ -22,7 +22,7 @@ public class Info implements Command {
     public void execute(String[] args) {
         System.out.println("Collection type: java.util.Stack");
         System.out.println("Initialization date: " + new Date());
-        System.out.println("Number of elements: " + Application.getCityStack().size());
+        System.out.println("Number of elements: " + Application.getSize());
         System.out.println("Next auto-generated ID: " + Application.getNextId());
-    }
+    }   
 }

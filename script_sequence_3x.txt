@@ -1,4 +1,3 @@
-# Script 5: run script_sequence three times
 execute_script script_sequence.txt
 execute_script script_sequence.txt
 execute_script script_sequence.txt

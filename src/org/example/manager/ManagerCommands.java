@@ -1,5 +1,6 @@
 package org.example.manager;
 
+import lombok.Getter;
 import org.example.commands.*;
 
 import java.util.Collection;
@@ -9,26 +10,28 @@ import org.example.Application;
 
 import java.util.Scanner;
 
+@Getter
 public class ManagerCommands {
     private final Map<String, Command> commands = new HashMap<>();
 
     public ManagerCommands(Application app) {
-        commands.put("Help", new Help(app, this.commands));
-        commands.put("Info", new Info(app));
-        commands.put("Show", new Show(app));
-        commands.put("Add", new Add(app));
-        commands.put("Update", new Update(app));
-        commands.put("RemoveById", new RemoveById(app));
-        commands.put("Clear", new Clear(app));
-        commands.put("Save", new Save(app));
-        commands.put("ExecuteScript", new ExecuteScript(app, this));
-        commands.put("Exit", new Exit(app));
-        commands.put("InsertAt", new InsertAt(app));
-        commands.put("AddIfMax", new AddIfMax(app));
-        commands.put("Sort", new Sort(app));
-        commands.put("CountLessThanStandardOfLiving", new CountLessThanStandardOfLiving(app));
-        commands.put("FilterByGovernor", new FilterByGovernor(app));
-        commands.put("PrintFieldAscendingStandardOfLiving", new PrintFieldAscendingStandardOfLiving(app));
+
+        commands.put("help", new Help(app));
+        commands.put("info", new Info(app));
+        commands.put("show", new Show(app));
+        commands.put("add", new Add(app));
+        commands.put("update", new Update(app));
+        commands.put("remove_by_id", new RemoveById(app));
+        commands.put("clear", new Clear(app));
+        commands.put("save", new Save(app));
+        commands.put("execute_script", new ExecuteScript(app, this));
+        commands.put("exit", new Exit(app));
+        commands.put("insert_at", new InsertAt(app));
+        commands.put("add_if_max", new AddIfMax(app));
+        commands.put("sort", new Sort(app));
+        commands.put("count_less_than_standard_of_living", new CountLessThanStandardOfLiving(app));
+        commands.put("filter_by_governor", new FilterByGovernor(app));
+        commands.put("print_field_ascending_standard_of_living", new PrintFieldAscendingStandardOfLiving(app));
     }
 
 
@@ -38,10 +41,12 @@ public class ManagerCommands {
         }
 
         String commandName = commandParts[0].toLowerCase();
-        Command command = commands.get(commandName);
 
+        Command command = commands.get(commandName);
+       // System.out.println(commandName);
         if (command != null) {
             try {
+                System.out.println(command);
                 command.execute(commandParts);
             } catch (Exception e) {
                 System.err.println("Error when executing the command: " + e.getMessage());
@@ -51,8 +56,6 @@ public class ManagerCommands {
             System.err.println("Enter 'help' for reference.");
         }
     }
-
-
 
 
 }

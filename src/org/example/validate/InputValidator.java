@@ -30,22 +30,6 @@ public class InputValidator {
 
     //-------------------------------
 
-    public static Long validateId(String idString) throws InvalidDataException {
-        if (idString == null || idString.trim().isEmpty()) {
-            throw new InvalidDataException("ID cannot be empty");
-        }
-
-        try {
-            long id = Long.parseLong(idString.trim());
-            if (id <= MIN_ID) {
-                throw new InvalidDataException("ID must be greater than 0 (received: " + id + ")");
-            }
-            return id;
-        } catch (NumberFormatException e) {
-            throw new InvalidDataException("ID must be a valid integer number");
-        }
-    }
-
     public static void validateId(Long id) throws InvalidDataException {
         if (id == null) {
             throw new InvalidDataException("ID cannot be null");
@@ -91,6 +75,8 @@ public class InputValidator {
         }
     }
 
+    //-----------------------------------------
+
     public static void validateCoordinates(float x, double y) throws InvalidDataException {
         if (x > MAX_X) {
             throw new InvalidDataException(
@@ -124,23 +110,6 @@ public class InputValidator {
 
 
     //-----------------------------
-
-
-    public static Double validateArea(String areaString) throws InvalidDataException {
-        if (areaString == null || areaString.trim().isEmpty()) {
-            throw new InvalidDataException("Area cannot be empty");
-        }
-
-        try {
-            double area = Double.parseDouble(areaString.trim());
-            if (area <= MIN_AREA) {
-                throw new InvalidDataException("Area must be greater than 0 (received: " + area + ")");
-            }
-            return area;
-        } catch (NumberFormatException e) {
-            throw new InvalidDataException("Area must be a valid number");
-        }
-    }
 
     public static void validateArea(Double area) throws InvalidDataException {
         if (area == null) {
@@ -177,6 +146,8 @@ public class InputValidator {
             throw new InvalidDataException("Invalid date format. Expected: yyyy-MM-dd'T'HH:mm:ss");
         }
     }
+
+    //-----------------------
 
     public static java.util.Date validateBirthday(String dateString) throws InvalidDataException {
         if (dateString == null || dateString.trim().isEmpty()) {
