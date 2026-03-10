@@ -1,16 +1,17 @@
 package org.example.data;
 
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+
 public class Coordinates {
-    private final float x;
-    private final double y;
-
-    public Coordinates(float x, double y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public float getX() { return x; }
-    public double getY() { return y; }
+    private float x;
+    private double y;
 
     @Override
     public String toString() {

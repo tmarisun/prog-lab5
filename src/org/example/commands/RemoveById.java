@@ -35,7 +35,7 @@ public class RemoveById implements Command {
             long id = Long.parseLong(args[1]);
             InputValidator.validateId(id);
 
-            Stack<City> stack = app.getCityStack();
+            Stack<City> stack = Application.getCityStack();
             City toRemove = null;
 
             for (City city : stack) {

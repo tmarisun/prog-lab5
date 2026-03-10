@@ -1,5 +1,8 @@
 package org.example.data;
 
+import lombok.Getter;
+
+@Getter
 public enum StandardOfLiving {
     HIGH(0),
     MEDIUM(1),
@@ -16,4 +19,14 @@ public enum StandardOfLiving {
     public int getRank() {
         return rank;
     }
+
+//    @JsonCreator
+//    public static StandardOfLiving fromValue(int value) {
+//        for (StandardOfLiving s : StandardOfLiving.values()) {
+//            if (s.rank == value) {
+//                return s;
+//            }
+//        }
+//        throw new IllegalArgumentException();
+//    }
 }

@@ -1,28 +1,29 @@
 package org.example;
 
 import org.example.manager.ManagerCommands;
+import org.example.service.CityReader;
 
 import java.util.Scanner;
 import java.util.NoSuchElementException;
 
 public class Scene {
     private final Application app;
-    private final ManagerCommands manager;
+    private static ManagerCommands manager;
     private final Scanner scanner;
 
-    public Scene(Application app) {
+    public  Scene(Application app) {
         this.app = app;
-        this.manager = app.getManagerCommands();
+        manager = app.getManagerCommands();
         this.scanner = new Scanner(System.in);
     }
 
-    public void run() {
+    public static void run() {
         System.out.println("The program is running. Enter 'help' for help.");
         while (true) {
             System.out.print("> ");
             String line;
             try {
-                line = scanner.nextLine().trim();
+                line = CityReader.scanner.nextLine().trim();
             } catch (NoSuchElementException e) {
                 System.out.println("\nInput stream was closed. Exiting program.");
                 break;

@@ -1,42 +1,39 @@
 package org.example.manager;
 
+import lombok.Getter;
 import org.example.commands.*;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import org.example.Application;
 
 import java.util.Scanner;
 
+@Getter
 public class ManagerCommands {
     private final Map<String, Command> commands = new HashMap<>();
 
     public ManagerCommands(Application app) {
-        register(new Help(app, this));
-        register(new Info(app));
-        register(new Show(app));
-        register(new Add(app));
-        register(new Update(app));
-        register(new RemoveById(app));
-        register(new Clear(app));
-        register(new Save(app));
-        register(new ExecuteScript(app, this));
-        register(new Exit(app));
-        register(new InsertAt(app));
-        register(new AddIfMax(app));
-        register(new Sort(app));
-        register(new CountLessThanStandardOfLiving(app));
-        register(new FilterByGovernor(app));
-        register(new PrintFieldAscendingStandardOfLiving(app));
+
+        commands.put("help", new Help(app));
+        commands.put("info", new Info(app));
+        commands.put("show", new Show(app));
+        commands.put("add", new Add(app));
+        commands.put("update", new Update(app));
+        commands.put("remove_by_id", new RemoveById(app));
+        commands.put("clear", new Clear(app));
+        commands.put("save", new Save(app));
+        commands.put("execute_script", new ExecuteScript(app, this));
+        commands.put("exit", new Exit(app));
+        commands.put("insert_at", new InsertAt(app));
+        commands.put("add_if_max", new AddIfMax(app));
+        commands.put("sort", new Sort(app));
+        commands.put("count_less_than_standard_of_living", new CountLessThanStandardOfLiving(app));
+        commands.put("filter_by_governor", new FilterByGovernor(app));
+        commands.put("print_field_ascending_standard_of_living", new PrintFieldAscendingStandardOfLiving(app));
     }
 
-    private void register(Command command) {
-        commands.put(command.getName().toLowerCase(), command);
-    }
-
-    public Iterable<Command> getAllCommands() {
-        return commands.values();
-    }
 
     public void callCommand(String[] commandParts) {
         if (commandParts.length == 0) {
@@ -44,10 +41,12 @@ public class ManagerCommands {
         }
 
         String commandName = commandParts[0].toLowerCase();
-        Command command = commands.get(commandName);
 
+        Command command = commands.get(commandName);
+       // System.out.println(commandName);
         if (command != null) {
             try {
+                System.out.println(command);
                 command.execute(commandParts);
             } catch (Exception e) {
                 System.err.println("Error when executing the command: " + e.getMessage());

@@ -1,0 +1,19 @@
+{
+  "id": "10",
+  "name": "ScriptCity",
+  "coordinates": {
+    "x": 50.0,
+    "y": 200.0
+  },
+  "creationDate": "2025-01-01T10:00:00",
+  "area": "123.45",
+  "population": "500000",
+  "metersAboveSeaLevel": "42",
+  "climate": "RAIN_FOREST",
+  "government": "OLIGARCHY",
+  "standardOfLiving": "MEDIUM",
+  "governor": {
+    "birthday": "1985-07-10"
+  }
+}
+

@@ -1,10 +1,10 @@
 package org.example.commands;
 
 import org.example.Application;
-import org.example.service.ConsoleInputHandler;
-import org.example.service.JsonCityReader;
+import org.example.service.CityReader;
 import org.example.data.City;
-import java.util.Scanner;
+import org.example.validate.CityValidator;
+
 import java.util.Stack;
 
 public class AddIfMax implements Command {
@@ -27,20 +27,9 @@ public class AddIfMax implements Command {
     @Override
     public void execute(String[] args) {
         try {
-            City candidate;
-            if (args.length >= 2 && args[1] != null && args[1].trim().toLowerCase().endsWith(".json")) {
-                candidate = JsonCityReader.readSingleCity(args[1].trim());
-
-                boolean idExists = Application.getCityStack().stream()
-                        .anyMatch(c -> c.getId().equals(candidate.getId()));
-                if (idExists) {
-                    System.err.println("Cannot add city: ID " + candidate.getId() + " already exists in the collection.");
-                    return;
-                }
-            } else {
-                candidate = ConsoleInputHandler.readCityFromConsole();
-            }
-            Stack<City> stack = app.getCityStack();
+            City candidate = CityReader.readCity();
+            CityValidator.validateCity(candidate);
+            Stack<City> stack = Application.getCityStack();
 
             if (stack.isEmpty() || candidate.compareTo(stack.stream().max(City::compareTo).get()) > 0) {
                 stack.push(candidate);

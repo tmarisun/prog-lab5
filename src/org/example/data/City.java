@@ -1,19 +1,24 @@
 package org.example.data;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.example.data.Climate;
+import org.example.data.StandardOfLiving;
 
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
+@ToString
 
 public class City implements Comparable<City>{
 
     private Long id;
     private String name;
     private Coordinates coordinates;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "UTC")
     private java.util.Date creationDate;
     private Double area;
     private int population;
