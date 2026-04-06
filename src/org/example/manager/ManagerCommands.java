@@ -3,12 +3,10 @@ package org.example.manager;
 import lombok.Getter;
 import org.example.commands.*;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import org.example.Application;
 
-import java.util.Scanner;
 
 @Getter
 public class ManagerCommands {
@@ -33,6 +31,7 @@ public class ManagerCommands {
         commands.put("filter_by_governor", new FilterByGovernor(app));
         commands.put("print_field_ascending_standard_of_living", new PrintFieldAscendingStandardOfLiving(app));
     }
+
 
 
     public void callCommand(String[] commandParts) {

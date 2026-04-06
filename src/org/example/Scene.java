@@ -6,6 +6,7 @@ import org.example.service.CityReader;
 import java.util.Scanner;
 import java.util.NoSuchElementException;
 
+
 public class Scene {
     private final Application app;
     private static ManagerCommands manager;
@@ -16,6 +17,7 @@ public class Scene {
         manager = app.getManagerCommands();
         this.scanner = new Scanner(System.in);
     }
+
 
     public static void run() {
         System.out.println("The program is running. Enter 'help' for help.");

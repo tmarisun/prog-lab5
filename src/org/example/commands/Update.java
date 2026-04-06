@@ -58,7 +58,6 @@ public class Update implements Command {
 
             found.setName(newCity.getName());
             found.setCoordinates(newCity.getCoordinates());
-            // creationDate не меняется при update — остаётся момент первоначального создания элемента
             found.setArea(newCity.getArea());
             found.setPopulation(newCity.getPopulation());
             found.setMetersAboveSeaLevel(newCity.getMetersAboveSeaLevel());

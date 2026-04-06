@@ -6,6 +6,9 @@ import org.example.service.InputReader;
 import org.example.service.InputReaderFactory;
 import org.example.validate.CityValidator;
 
+/**
+ * Команда добавления города в коллекцию (с консоли или из JSON-файла, если указан аргумент).
+ */
 public class Add implements Command {
     private final Application app;
 
@@ -37,7 +40,13 @@ public class Add implements Command {
 
             CityValidator.validateCity(city);
 
-            boolean idExists = Application.getCityStack().stream().anyMatch(c -> c.getId().equals(city.getId()));
+            boolean idExists = false;
+            for (City existing : Application.getCityStack()) {
+                if (existing.getId().equals(city.getId())) {
+                    idExists = true;
+                    break;
+                }
+            }
             if (idExists) {
                 System.out.println("Cannot add city: ID " + city.getId() + " already exists in the collection.");
                 return;

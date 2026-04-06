@@ -4,19 +4,20 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.example.data.*;
 import org.example.data.City;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Stack;
 
-
+/**
+ * Загрузка коллекции городов из JSON-файла.
+ */
 public class JsonFileLoader {
-
-    static ObjectMapper objectMapper = new ObjectMapper();
 
     public static Stack<City> loadCollection(String filename) throws IOException {
 
@@ -24,16 +25,26 @@ public class JsonFileLoader {
         if (!file.exists()) {
             throw new FileNotFoundException("File : " + filename + " not found. Please check the file path.");
         }
+        if (!file.canRead()) {
+            throw new IOException("Нет прав на чтение файла: " + filename);
+        }
+
+        // Читаем текст файла в память
+        StringBuilder content = new StringBuilder();
+        try (FileInputStream fis = new FileInputStream(file);
+             InputStreamReader reader = new InputStreamReader(fis, StandardCharsets.UTF_8)) {
+            char[] buffer = new char[1024];
+            int len;
+            while ((len = reader.read(buffer)) != -1) {
+                content.append(buffer, 0, len);
+            }
+        }
 
         ObjectMapper mapper = new ObjectMapper();
-
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
 
-        File jsonFile = new File(filename);
-
-        return mapper.readValue(jsonFile, new TypeReference<Stack<City>>() {});
-
+        return mapper.readValue(content.toString(), new TypeReference<Stack<City>>() {});
     }
 
 }

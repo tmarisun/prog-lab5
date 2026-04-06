@@ -17,9 +17,9 @@ import java.util.Stack;
 
 import static org.example.validate.InputValidator.validateUniqueIds;
 
+
 public class Application {
 
-    /** При старте подмешиваются города из этого файла (рабочая директория процесса). */
     public static final String SCRIPT_CITY_FILE = "script_city.json";
 
     @Getter
@@ -28,6 +28,7 @@ public class Application {
     private String fileName;
     @Getter
     private ManagerCommands managerCommands;
+
 
     public Application(String filename) throws IOException, NoRightsException {
         this.fileName = filename;
@@ -40,9 +41,7 @@ public class Application {
         this.managerCommands = new ManagerCommands(this);
     }
 
-    /**
-     * Если рядом с запуском есть {@link #SCRIPT_CITY_FILE}, загружает оттуда города и добавляет в коллекцию.
-     */
+
     private void mergeScriptCityFileIfPresent() {
         File scriptFile = new File(SCRIPT_CITY_FILE);
         if (!scriptFile.exists() || !scriptFile.isFile()) {
@@ -52,7 +51,13 @@ public class Application {
             List<City> extra = JsonFileInputReader.loadAllCitiesFromJsonFile(SCRIPT_CITY_FILE);
             for (City city : extra) {
                 CityValidator.validateCity(city);
-                boolean duplicate = cityStack.stream().anyMatch(c -> c.getId().equals(city.getId()));
+                boolean duplicate = false;
+                for (City existing : cityStack) {
+                    if (existing.getId().equals(city.getId())) {
+                        duplicate = true;
+                        break;
+                    }
+                }
                 if (duplicate) {
                     System.out.println("Warning: " + SCRIPT_CITY_FILE + " — id " + city.getId()
                             + " уже есть в коллекции, элемент пропущен.");
@@ -71,11 +76,15 @@ public class Application {
         return cityStack.size();
     }
 
+
     public static long getNextId() {
-        return cityStack.stream()
-                .mapToLong(City::getId)
-                .max()
-                .orElse(0) + 1;
+        long maxId = 0;
+        for (City city : cityStack) {
+            if (city.getId() > maxId) {
+                maxId = city.getId();
+            }
+        }
+        return maxId + 1;
     }
 
     public void addCity(City city) {

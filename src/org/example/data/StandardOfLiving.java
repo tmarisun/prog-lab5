@@ -20,13 +20,4 @@ public enum StandardOfLiving {
         return rank;
     }
 
-//    @JsonCreator
-//    public static StandardOfLiving fromValue(int value) {
-//        for (StandardOfLiving s : StandardOfLiving.values()) {
-//            if (s.rank == value) {
-//                return s;
-//            }
-//        }
-//        throw new IllegalArgumentException();
-//    }
 }
