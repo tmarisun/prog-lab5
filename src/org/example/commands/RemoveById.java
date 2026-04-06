@@ -27,7 +27,7 @@ public class RemoveById implements Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 2) {
-            System.err.println("Usage: remove_by_id <id>");
+            System.out.println("Usage: remove_by_id <id>");
             return;
         }
 
@@ -54,7 +54,7 @@ public class RemoveById implements Command {
             System.out.println("City removed successfully.");
 
         } catch (NumberFormatException | InvalidDataException e) {
-            System.err.println("Invalid ID format.");
+            System.out.println("Invalid ID format.");
         }
     }
 }

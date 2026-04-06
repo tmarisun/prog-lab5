@@ -24,7 +24,7 @@ public class CountLessThanStandardOfLiving implements Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 2) {
-            System.err.println("Usage: count_less_than_standard_of_living <value>");
+            System.out.println("Usage: count_less_than_standard_of_living <value>");
             return;
         }
 
@@ -43,7 +43,7 @@ public class CountLessThanStandardOfLiving implements Command {
             System.out.println("Cities with standard of living below " + threshold + ": " + count);
 
         } catch (IllegalArgumentException e) {
-            System.err.println("Invalid StandardOfLiving value. Valid values: HIGH, MEDIUM, LOW, ULTRA_LOW, NIGHTMARE");
+            System.out.println("Invalid StandardOfLiving value. Valid values: HIGH, MEDIUM, LOW, ULTRA_LOW, NIGHTMARE");
         }
     }
 }

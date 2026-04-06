@@ -19,7 +19,7 @@ public class Main {
             Scene scene = new Scene(app);
             Scene.run();
         } catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
     }
 }

@@ -29,7 +29,7 @@ public class Update implements Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 2) {
-            System.err.println("Usage: update <id> [city.json]");
+            System.out.println("Usage: update <id> [city.json]");
             return;
         }
 
@@ -49,7 +49,7 @@ public class Update implements Command {
             }
 
             if (found == null) {
-                System.err.println("City with ID " + id + " not found.");
+                System.out.println("City with ID " + id + " not found.");
                 return;
             }
 
@@ -58,7 +58,7 @@ public class Update implements Command {
 
             found.setName(newCity.getName());
             found.setCoordinates(newCity.getCoordinates());
-            found.setCreationDate(newCity.getCreationDate());
+            // creationDate не меняется при update — остаётся момент первоначального создания элемента
             found.setArea(newCity.getArea());
             found.setPopulation(newCity.getPopulation());
             found.setMetersAboveSeaLevel(newCity.getMetersAboveSeaLevel());
@@ -70,9 +70,9 @@ public class Update implements Command {
             System.out.println("City updated successfully (element kept in collection, id preserved).");
 
         } catch (NumberFormatException | InvalidDataException e) {
-            System.err.println("Invalid ID format.");
+            System.out.println("Invalid ID format.");
         } catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
     }
 }

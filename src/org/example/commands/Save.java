@@ -26,7 +26,7 @@ public class Save implements Command {
             JsonFileSaver.saveCitiesToFile(Application.getCityStack(), app.getFileName());
             System.out.println("Collection saved to " + app.getFileName());
         } catch (Exception e) {
-            System.err.println("Error saving: " + e.getMessage());
+            System.out.println("Error saving: " + e.getMessage());
         }
     }
 }

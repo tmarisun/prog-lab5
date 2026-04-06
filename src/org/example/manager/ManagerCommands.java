@@ -43,17 +43,15 @@ public class ManagerCommands {
         String commandName = commandParts[0].toLowerCase();
 
         Command command = commands.get(commandName);
-       // System.out.println(commandName);
         if (command != null) {
             try {
-                System.out.println(command);
                 command.execute(commandParts);
             } catch (Exception e) {
-                System.err.println("Error when executing the command: " + e.getMessage());
+                System.out.println("Error when executing the command: " + e.getMessage());
             }
         } else {
-            System.err.println("Unidentified command: " + commandName);
-            System.err.println("Enter 'help' for reference.");
+            System.out.println("Unidentified command: " + commandName);
+            System.out.println("Enter 'help' for reference.");
         }
     }
 

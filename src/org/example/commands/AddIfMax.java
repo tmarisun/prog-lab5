@@ -38,7 +38,7 @@ public class AddIfMax implements Command {
                 System.out.println("City not added - does not exceed maximum ID.");
             }
         } catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
     }
 }

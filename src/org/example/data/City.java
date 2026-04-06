@@ -18,7 +18,8 @@ public class City implements Comparable<City>{
     private Long id;
     private String name;
     private Coordinates coordinates;
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "UTC")
+    /** Локальное время системы при создании; формат yyyy-MM-dd'T'HH:mm:ss в зоне JVM по умолчанию. */
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private java.util.Date creationDate;
     private Double area;
     private int population;

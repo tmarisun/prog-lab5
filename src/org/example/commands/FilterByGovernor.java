@@ -28,7 +28,7 @@ public class FilterByGovernor implements Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 2) {
-            System.err.println("Usage: filter_by_governor <birthday (yyyy-MM-ddTHH:mm:ss)>");
+            System.out.println("Usage: filter_by_governor <birthday (yyyy-MM-ddTHH:mm:ss)>");
             return;
         }
 
@@ -51,7 +51,7 @@ public class FilterByGovernor implements Command {
             }
 
         } catch (Exception e) {
-            System.err.println("Invalid date format. Use yyyy-MM-dd'T'HH:mm:ss");
+            System.out.println("Invalid date format. Use yyyy-MM-dd'T'HH:mm:ss");
         }
 
     }

@@ -19,7 +19,8 @@ public class JsonFileSaver {
     private static final SimpleDateFormat BIRTHDAY_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     static {
-        DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
+        // Локальное время системы при сохранении (соответствует генерации creationDate при создании)
+        DATE_FORMAT.setTimeZone(TimeZone.getDefault());
     }
 
     public static void saveCitiesToFile(Stack<City> cities, String filename) throws IOException {

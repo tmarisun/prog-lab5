@@ -21,6 +21,7 @@ public class Scene {
         System.out.println("The program is running. Enter 'help' for help.");
         while (true) {
             System.out.print("> ");
+            System.out.flush();
             String line;
             try {
                 line = CityReader.scanner.nextLine().trim();

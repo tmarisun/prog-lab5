@@ -1,8 +1,9 @@
 package org.example.commands;
 
 import org.example.Application;
-import org.example.service.CityReader;
 import org.example.data.City;
+import org.example.service.InputReader;
+import org.example.service.InputReaderFactory;
 import org.example.validate.CityValidator;
 
 public class Add implements Command {
@@ -25,12 +26,29 @@ public class Add implements Command {
     @Override
     public void execute(String[] args) {
         try {
-            City city = CityReader.readCity();
+            String filePath = (args.length >= 2) ? args[1] : null;
+            InputReader reader = InputReaderFactory.createReader(filePath, org.example.service.CityReader.scanner);
+            City city = reader.readCity();
+
+            if (city == null) {
+                System.out.println("Cannot add element: invalid input data.");
+                return;
+            }
+
             CityValidator.validateCity(city);
+
+            boolean idExists = Application.getCityStack().stream().anyMatch(c -> c.getId().equals(city.getId()));
+            if (idExists) {
+                System.out.println("Cannot add city: ID " + city.getId() + " already exists in the collection.");
+                return;
+            }
+
             app.addCity(city);
-            System.out.println("Successfully add: " + city.getId());
+            if (!org.example.service.CityReader.isScriptMode()) {
+                System.out.println("Successfully add: " + city.getId());
+            }
         } catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
     }
 }

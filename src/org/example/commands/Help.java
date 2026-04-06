@@ -25,9 +25,6 @@ public class Help implements Command {
 
     @Override
     public void execute(String[] args) throws FileNotFoundException {
-       // System.out.println(args);
-        //if (args != null) throw new IllegalArgumentException("Command 'help' does not accept any arguments.");
-
         app.help();
     }
 

@@ -154,13 +154,18 @@ public class InputValidator {
             throw new InvalidDataException("Birthday cannot be empty");
         }
 
-        try {
-            java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-            format.setLenient(false);
-            return format.parse(dateString.trim());
-        } catch (Exception e) {
-            throw new InvalidDataException("Invalid birthday format. Expected: yyyy-MM-dd'T'HH:mm:ss");
+        String s = dateString.trim();
+        String[] patterns = {"yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd"};
+        for (String pattern : patterns) {
+            try {
+                java.text.SimpleDateFormat format = new java.text.SimpleDateFormat(pattern);
+                format.setLenient(false);
+                return format.parse(s);
+            } catch (Exception ignored) {
+                // try next pattern
+            }
         }
+        throw new InvalidDataException("Invalid birthday format. Expected: yyyy-MM-dd or yyyy-MM-dd'T'HH:mm:ss");
     }
 
 

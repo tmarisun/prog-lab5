@@ -27,7 +27,7 @@ public class InsertAt implements Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 2) {
-            System.err.println("Usage: insert_at <index>");
+            System.out.println("Usage: insert_at <index>");
             return;
         }
 
@@ -37,7 +37,7 @@ public class InsertAt implements Command {
             Stack<City> stack = Application.getCityStack();
 
             if (index < 0 || index > stack.size()) {
-                System.err.println("Index must be between 0 and " + stack.size());
+                System.out.println("Index must be between 0 and " + stack.size());
                 return;
             }
 
@@ -48,9 +48,9 @@ public class InsertAt implements Command {
             System.out.println("City inserted at position " + index);
 
         } catch (NumberFormatException e) {
-            System.err.println("Invalid index format.");
+            System.out.println("Invalid index format.");
         } catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
     }
 }
