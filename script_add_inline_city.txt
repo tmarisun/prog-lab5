@@ -1,0 +1,14 @@
+# add city using inline fields in script
+add
+Scriptville
+100.5
+200.5
+555.5
+12345
+RAIN_FOREST
+150
+OLIGARCHY
+MEDIUM
+n
+show
+
