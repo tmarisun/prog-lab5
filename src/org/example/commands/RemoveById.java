@@ -5,6 +5,7 @@ import org.example.exceptions.InvalidDataException;
 import org.example.data.City;
 import org.example.validate.InputValidator;
 
+import java.time.format.DateTimeParseException;
 import java.util.Stack;
 
 public class RemoveById implements Command {
@@ -27,7 +28,7 @@ public class RemoveById implements Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 2) {
-            System.err.println("Usage: remove_by_id <id>");
+            System.out.println("Usage: remove_by_id <id>");
             return;
         }
 
@@ -35,7 +36,7 @@ public class RemoveById implements Command {
             long id = Long.parseLong(args[1]);
             InputValidator.validateId(id);
 
-            Stack<City> stack = app.getCityStack();
+            Stack<City> stack = Application.getCityStack();
             City toRemove = null;
 
             for (City city : stack) {
@@ -53,8 +54,8 @@ public class RemoveById implements Command {
             stack.remove(toRemove);
             System.out.println("City removed successfully.");
 
-        } catch (NumberFormatException | InvalidDataException e) {
-            System.err.println("Invalid ID format.");
+        } catch (NumberFormatException | DateTimeParseException e) {
+            System.out.println("Invalid ID format.");
         }
     }
 }

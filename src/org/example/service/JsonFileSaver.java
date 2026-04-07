@@ -12,15 +12,18 @@ import java.text.SimpleDateFormat;
 import java.util.Stack;
 import java.util.TimeZone;
 
-
+/**
+ * Сохранение коллекции в JSON-файл. Запись через
+ */
 public class JsonFileSaver {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     private static final SimpleDateFormat BIRTHDAY_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     static {
-        DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
+        DATE_FORMAT.setTimeZone(TimeZone.getDefault());
     }
+
 
     public static void saveCitiesToFile(Stack<City> cities, String filename) throws IOException {
         JSONArray jsonArray = new JSONArray();

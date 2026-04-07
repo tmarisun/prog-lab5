@@ -4,10 +4,8 @@ import org.example.Application;
 import java.util.Scanner;
 
 public class Exit implements Command {
-    private final Application app;
 
     public Exit(Application app) {
-        this.app = app;
     }
 
     @Override

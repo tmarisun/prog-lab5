@@ -2,6 +2,7 @@ package org.example.commands;
 
 import org.example.Application;
 import org.example.manager.ManagerCommands;
+import org.example.service.CityReader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,9 +32,9 @@ public class ExecuteScript implements Command {
     }
 
     @Override
-    public void execute(String[] args) {
+    public void execute(String[] args) throws FileNotFoundException {
         if (args.length < 2) {
-            System.err.println("Usage: execute_script <file_name>");
+            System.out.println("Usage: execute_script <file_name>");
             return;
         }
 
@@ -41,48 +42,55 @@ public class ExecuteScript implements Command {
         File file = new File(fileName);
 
         if (!file.exists()) {
-            System.err.println("File not found: " + fileName);
+            System.out.println("File not found: " + fileName);
             return;
         }
 
         if (!file.canRead()) {
-            System.err.println("Cannot read file: " + fileName);
+            System.out.println("Cannot read file: " + fileName);
             return;
         }
 
         String absolutePath = file.getAbsolutePath();
 
         if (executingScripts.contains(absolutePath)) {
-            System.err.println("Recursion detected! Script cannot call itself: " + fileName);
+            System.out.println("Recursion detected! Script cannot call itself: " + fileName);
             return;
         }
 
         executingScripts.add(absolutePath);
 
+        Scanner previousScanner = CityReader.scanner;
+        // Вложенный execute_script: не дублировать заголовки и эхо строк в stdout
+        boolean quiet = CityReader.isScriptMode();
+        CityReader.enterScript();
         try (Scanner fileScanner = new Scanner(file, "UTF-8")) {
-            System.out.println("Executing script: " + fileName);
+            CityReader.setScanner(fileScanner);
+            if (!quiet) {
+                System.out.println("Executing script: " + fileName);
+            }
 
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine().trim();
-
                 if (line.isEmpty() || line.startsWith("#")) {
                     continue;
                 }
 
-                System.out.println("$ " + line);
-
+                if (!quiet) {
+                    System.out.println("$ " + line);
+                }
                 String[] commandParts = line.split("\\s+", 2);
-
                 managerCommands.callCommand(commandParts);
             }
 
-            System.out.println("Script execution completed: " + fileName);
-
-        } catch (FileNotFoundException e) {
-            System.err.println("Script file not found: " + fileName);
+            if (!quiet) {
+                System.out.println("Script execution completed: " + fileName);
+            }
         } catch (Exception e) {
-            System.err.println("Error executing script: " + e.getMessage());
+            System.out.println("Error executing script: " + e.getMessage());
         } finally {
+            CityReader.leaveScript();
+            CityReader.setScanner(previousScanner);
             executingScripts.remove(absolutePath);
         }
     }

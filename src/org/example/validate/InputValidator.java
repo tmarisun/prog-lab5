@@ -30,22 +30,6 @@ public class InputValidator {
 
     //-------------------------------
 
-    public static Long validateId(String idString) throws InvalidDataException {
-        if (idString == null || idString.trim().isEmpty()) {
-            throw new InvalidDataException("ID cannot be empty");
-        }
-
-        try {
-            long id = Long.parseLong(idString.trim());
-            if (id <= MIN_ID) {
-                throw new InvalidDataException("ID must be greater than 0 (received: " + id + ")");
-            }
-            return id;
-        } catch (NumberFormatException e) {
-            throw new InvalidDataException("ID must be a valid integer number");
-        }
-    }
-
     public static void validateId(Long id) throws InvalidDataException {
         if (id == null) {
             throw new InvalidDataException("ID cannot be null");
@@ -57,13 +41,12 @@ public class InputValidator {
 
     //----------------
 
-    public static Float validateX(String xString) throws InvalidDataException {
-        if (xString == null || xString.trim().isEmpty()) {
+    public static Float validateX(Float x) throws InvalidDataException {
+        if (x == null) {
             throw new InvalidDataException("X coordinate cannot be empty");
         }
 
         try {
-            float x = Float.parseFloat(xString.trim());
             if (x > MAX_X) {
                 throw new InvalidDataException(
                         "X coordinate cannot exceed " + MAX_X + " (received: " + x + ")"
@@ -75,13 +58,12 @@ public class InputValidator {
         }
     }
 
-    public static Double validateY(String yString) throws InvalidDataException {
-        if (yString == null || yString.trim().isEmpty()) {
+    public static Double validateY(Double y) throws InvalidDataException {
+        if (y == null) {
             throw new InvalidDataException("Y coordinate cannot be empty");
         }
 
         try {
-            double y = Double.parseDouble(yString.trim());
             if (y > MAX_Y) {
                 throw new InvalidDataException(
                         "Y coordinate cannot exceed " + MAX_Y + " (received: " + y + ")"
@@ -92,6 +74,8 @@ public class InputValidator {
             throw new InvalidDataException("Y coordinate must be a valid double number");
         }
     }
+
+    //-----------------------------------------
 
     public static void validateCoordinates(float x, double y) throws InvalidDataException {
         if (x > MAX_X) {
@@ -110,47 +94,22 @@ public class InputValidator {
 
 
 
-    public static Integer validatePopulation(String popString) throws InvalidDataException {
-        if (popString == null || popString.trim().isEmpty()) {
+    public static void validatePopulation(Integer population) throws InvalidDataException {
+        if (population == null) {
             throw new InvalidDataException("Population cannot be empty");
         }
 
         try {
-            int population = Integer.parseInt(popString.trim());
             if (population <= MIN_POPULATION) {
                 throw new InvalidDataException("Population must be greater than 0 (received: " + population + ")");
             }
-            return population;
         } catch (NumberFormatException e) {
             throw new InvalidDataException("Population must be a valid integer number");
         }
     }
 
 
-    public static void validatePopulation(int population) throws InvalidDataException {
-        if (population <= MIN_POPULATION) {
-            throw new InvalidDataException("Population must be greater than 0 (received: " + population + ")");
-        }
-    }
-
     //-----------------------------
-
-
-    public static Double validateArea(String areaString) throws InvalidDataException {
-        if (areaString == null || areaString.trim().isEmpty()) {
-            throw new InvalidDataException("Area cannot be empty");
-        }
-
-        try {
-            double area = Double.parseDouble(areaString.trim());
-            if (area <= MIN_AREA) {
-                throw new InvalidDataException("Area must be greater than 0 (received: " + area + ")");
-            }
-            return area;
-        } catch (NumberFormatException e) {
-            throw new InvalidDataException("Area must be a valid number");
-        }
-    }
 
     public static void validateArea(Double area) throws InvalidDataException {
         if (area == null) {
@@ -188,18 +147,25 @@ public class InputValidator {
         }
     }
 
+    //-----------------------
+
     public static java.util.Date validateBirthday(String dateString) throws InvalidDataException {
         if (dateString == null || dateString.trim().isEmpty()) {
             throw new InvalidDataException("Birthday cannot be empty");
         }
 
-        try {
-            java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
-            format.setLenient(false);
-            return format.parse(dateString.trim());
-        } catch (Exception e) {
-            throw new InvalidDataException("Invalid birthday format. Expected: yyyy-MM-dd");
+        String s = dateString.trim();
+        String[] patterns = {"yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd"};
+        for (String pattern : patterns) {
+            try {
+                java.text.SimpleDateFormat format = new java.text.SimpleDateFormat(pattern);
+                format.setLenient(false);
+                return format.parse(s);
+            } catch (Exception ignored) {
+                // try next pattern
+            }
         }
+        throw new InvalidDataException("Invalid birthday format. Expected: yyyy-MM-dd or yyyy-MM-dd'T'HH:mm:ss");
     }
 
 

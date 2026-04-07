@@ -6,13 +6,13 @@ import org.example.data.Human;
 import org.example.validate.InputValidator;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Stack;
 
 public class FilterByGovernor implements Command {
-    private final Application app;
 
     public FilterByGovernor(Application app) {
-        this.app = app;
     }
 
     @Override
@@ -28,21 +28,20 @@ public class FilterByGovernor implements Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 2) {
-            System.err.println("Usage: filter_by_governor <birthday (yyyy-MM-dd)>");
+            System.out.println("Usage: filter_by_governor <birthday (yyyy-MM-ddTHH:mm:ss)>");
             return;
         }
 
         try {
-            java.util.Date birthday = InputValidator.validateBirthday(args[1].trim());
-            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-            Stack<City> stack = app.getCityStack();
+            Date birthday = InputValidator.validateBirthday(args[1]);
+            Stack<City> stack = Application.getCityStack();
             boolean found = false;
 
             for (City city : stack) {
                 Human governor = city.getGovernor();
-                if (governor != null
-                        && fmt.format(governor.birthday()).equals(fmt.format(birthday))) {
-                    System.out.println(city);
+                if (governor != null && isSameDay(governor.birthday(), birthday)) {
+                    //System.out.println(city);
+                    System.out.println("governor: " + governor);
                     found = true;
                 }
             }
@@ -52,7 +51,20 @@ public class FilterByGovernor implements Command {
             }
 
         } catch (Exception e) {
-            System.err.println("Invalid date format. Use yyyy-MM-dd");
+            System.out.println("Invalid date format. Use yyyy-MM-dd'T'HH:mm:ss");
         }
+
+    }
+
+    private boolean isSameDay(Date d1, Date d2) {
+        Calendar c1 = Calendar.getInstance();
+        Calendar c2 = Calendar.getInstance();
+
+        c1.setTime(d1);
+        c2.setTime(d2);
+
+        return c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR) &&
+                c1.get(Calendar.MONTH) == c2.get(Calendar.MONTH) &&
+                c1.get(Calendar.DAY_OF_MONTH) == c2.get(Calendar.DAY_OF_MONTH);
     }
 }

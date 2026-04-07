@@ -1,11 +1,16 @@
 package org.example.commands;
 
 import org.example.Application;
-import org.example.service.ConsoleInputHandler;
-import org.example.service.JsonCityReader;
 import org.example.data.City;
-import java.util.Scanner;
+import org.example.service.InputReader;
+import org.example.service.InputReaderFactory;
+import org.example.validate.CityValidator;
 
+import static org.example.service.CityReader.scanner;
+
+/**
+ * Команда добавления города в коллекцию (с консоли или из JSON-файла, если указан аргумент).
+ */
 public class Add implements Command {
     private final Application app;
 
@@ -26,23 +31,35 @@ public class Add implements Command {
     @Override
     public void execute(String[] args) {
         try {
-            City city;
-            if (args.length >= 2 && args[1] != null && args[1].trim().toLowerCase().endsWith(".json")) {
-                city = JsonCityReader.readSingleCity(args[1].trim());
+            String filePath = (args.length >= 2) ? args[1] : null;
+            InputReader reader = InputReaderFactory.createReader(filePath, scanner);
+            City city = reader.readCity();
 
-                boolean idExists = Application.getCityStack().stream()
-                        .anyMatch(c -> c.getId().equals(city.getId()));
-                if (idExists) {
-                    System.err.println("Cannot add city: ID " + city.getId() + " already exists in the collection.");
-                    return;
-                }
-            } else {
-                city = ConsoleInputHandler.readCityFromConsole();
+            if (city == null) {
+                System.out.println("Cannot add element: invalid input data.");
+                return;
             }
+
+            CityValidator.validateCity(city);
+
+            boolean idExists = false;
+            for (City existing : Application.getCityStack()) {
+                if (existing.getId().equals(city.getId())) {
+                    idExists = true;
+                    break;
+                }
+            }
+            if (idExists) {
+                System.out.println("Cannot add city: ID " + city.getId() + " already exists in the collection.");
+                return;
+            }
+
             app.addCity(city);
-            System.out.println("Successfully add: " + city.getId());
+            if (!org.example.service.CityReader.isScriptMode()) {
+                System.out.println("Successfully add: " + city.getId());
+            }
         } catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
     }
 }

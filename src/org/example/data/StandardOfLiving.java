@@ -1,5 +1,8 @@
 package org.example.data;
 
+import lombok.Getter;
+
+@Getter
 public enum StandardOfLiving {
     HIGH(0),
     MEDIUM(1),
@@ -13,7 +16,4 @@ public enum StandardOfLiving {
         this.rank = rank;
     }
 
-    public int getRank() {
-        return rank;
-    }
 }

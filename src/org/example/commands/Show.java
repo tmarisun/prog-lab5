@@ -5,10 +5,8 @@ import org.example.data.City;
 import java.util.Scanner;
 
 public class Show implements Command {
-    private final Application app;
 
     public Show(Application app) {
-        this.app = app;
     }
 
     @Override
@@ -23,11 +21,11 @@ public class Show implements Command {
 
     @Override
     public void execute(String[] args) {
-        if (app.getCityStack().isEmpty()) {
+        if (Application.getCityStack().isEmpty()) {
             System.out.println("Collection is empty.");
             return;
         }
-        for (City city : app.getCityStack()) {
+        for (City city : Application.getCityStack()) {
             System.out.println(city);
         }
     }

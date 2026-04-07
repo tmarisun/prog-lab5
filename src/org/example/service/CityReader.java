@@ -1,12 +1,7 @@
 package org.example.service;
 
 import org.example.Application;
-import org.example.data.City;
-import org.example.data.Coordinates;
-import org.example.data.Human;
-import org.example.data.Climate;
-import org.example.data.Government;
-import org.example.data.StandardOfLiving;
+import org.example.data.*;
 import org.example.exceptions.InvalidDataException;
 import org.example.validate.CoordinatesValidator;
 import org.example.validate.InputValidator;
@@ -17,10 +12,36 @@ import java.util.Scanner;
 
 import static org.example.validate.InputValidator.*;
 
-public class ConsoleInputHandler {
 
-    public static City readCityFromConsole() throws InvalidDataException {
-        Scanner scanner = new Scanner(System.in);
+public class CityReader {
+
+    public static Scanner scanner = new Scanner(System.in);
+
+    private static int scriptDepth = 0;
+
+    public static void setScanner(Scanner scanner) {
+        CityReader.scanner = scanner;
+    }
+
+    public static void enterScript() {
+        scriptDepth++;
+    }
+
+    public static void leaveScript() {
+        if (scriptDepth > 0) {
+            scriptDepth--;
+        }
+    }
+
+    public static boolean isScriptMode() {
+        return scriptDepth > 0;
+    }
+
+    public static City readCity() throws InvalidDataException {
+        Scanner scanner = CityReader.scanner;
+        if (isScriptMode()) {
+            return readCityFromScript(scanner);
+        }
         final int MAX_ATTEMPTS = 100;
         int attempts = 0;
         City city = new City();
@@ -140,9 +161,25 @@ public class ConsoleInputHandler {
             try{
                 Human governor = null;
                 if (readYesNo(scanner)) {
-                    java.util.Date birthday = readDate(scanner);
-                    governor = new Human(birthday);
+                    int date = 0;
+                    while(date < MAX_ATTEMPTS){
+                        try{
+                            java.util.Date birthday = readDate(scanner);
+                            governor = new Human(birthday);
+                            break;
+                        }
+                        catch(InvalidDataException e) {
+                            System.err.println("Error validation: " + e.getMessage());
+                            System.out.println("Try to enter the date again.\n");
+                            date++;
+                        }
+                    }
+
+                    if (governor == null) {
+                        throw new InvalidDataException("Too many failed attempts for birthday");
+                    }
                 }
+
                 city.setGovernor(governor);
                 break;
             }
@@ -152,6 +189,8 @@ public class ConsoleInputHandler {
                 attempts++;
             }
         }
+        // creationDate генерируется автоматически — локальное время системы в момент создания объекта
+        city.setCreationDate(new Date());
 
         long id = Application.getNextId();
         city.setId(id);
@@ -166,46 +205,153 @@ public class ConsoleInputHandler {
     }
 
 
+    private static City readCityFromScript(Scanner scanner) throws InvalidDataException {
+        City city = new City();
+        try {
+            String nameLine = nextLineRequired(scanner);
+            city.setName(InputValidator.validateName(nameLine));
+
+            String xLine = nextLineRequired(scanner);
+            float x = InputValidator.validateX(Float.parseFloat(xLine.trim()));
+            String yLine = nextLineRequired(scanner);
+            double y = InputValidator.validateY(Double.parseDouble(yLine.trim()));
+            Coordinates coordinates = new Coordinates(x, y);
+            CoordinatesValidator.validateCoordinates(coordinates);
+            city.setCoordinates(coordinates);
+
+            String areaLine = nextLineRequired(scanner);
+            double area = Double.parseDouble(areaLine.trim());
+            InputValidator.validateArea(area);
+            city.setArea(area);
+
+            String popLine = nextLineRequired(scanner);
+            int population = Integer.parseInt(popLine.trim());
+            InputValidator.validatePopulation(population);
+            city.setPopulation(population);
+
+            String climateLine = nextLineRequired(scanner);
+            city.setClimate(InputValidator.validateEnum(
+                    climateLine.isEmpty() ? null : climateLine,
+                    Climate.class, "climate", false));
+
+            String seaLine = nextLineRequired(scanner);
+            city.setMetersAboveSeaLevel(Integer.parseInt(seaLine.trim()));
+
+            String govLine = nextLineRequired(scanner);
+            city.setGovernment(InputValidator.validateEnum(
+                    govLine, Government.class, "government", true));
+
+            String solLine = nextLineRequired(scanner);
+            city.setStandardOfLiving(InputValidator.validateEnum(
+                    solLine.isEmpty() ? null : solLine,
+                    StandardOfLiving.class, "StandardOfLiving", false));
+
+            String ynLine = nextLineRequired(scanner);
+            Human governor = null;
+            if (isYes(ynLine)) {
+                String birthdayLine = nextLineRequired(scanner);
+                governor = new Human(InputValidator.validateBirthday(birthdayLine));
+            }
+            city.setGovernor(governor);
+
+            city.setCreationDate(new Date());
+            long id = Application.getNextId();
+            city.setId(id);
+            return city;
+        } catch (NumberFormatException e) {
+            System.err.println("Script parse error: " + e.getMessage());
+            throw new InvalidDataException("Invalid number in script");
+        } catch (InvalidDataException e) {
+            System.err.println("Script validation: " + e.getMessage());
+            throw e;
+        }
+    }
+
+    private static String nextLineRequired(Scanner scanner) throws InvalidDataException {
+        if (!scanner.hasNextLine()) {
+            throw new InvalidDataException("Unexpected end of script file");
+        }
+        return scanner.nextLine();
+    }
+
+    private static boolean isYes(String line) {
+        String s = line.trim();
+        return s.equalsIgnoreCase("y") || s.equalsIgnoreCase("yes") || s.equalsIgnoreCase("да");
+    }
+
     private static String readName(Scanner scanner) throws InvalidDataException {
         System.out.print("Enter the name of the city: ");
-        String scn = scanner.nextLine().trim();
-        scn = validateName(scn);
-        return scn;
+        String input = scanner.nextLine();
+        return validateName(input);
     }
 
     private static float readCoordinateX(Scanner scanner) throws InvalidDataException {
         System.out.print("  X: ");
-        String scn = scanner.nextLine().trim();
-        return validateX(scn);
+        if(scanner.hasNextFloat()){
+            return validateX(scanner.nextFloat());
+        }
+        else{
+            scanner.next();
+            throw new InvalidDataException("Type Error!");
+        }
     }
 
     private static int readSeaLevel(Scanner scanner) throws InvalidDataException {
         System.out.print("Enter the height above sea level: ");
-        String scn = scanner.nextLine().trim();
-        return Integer.parseInt(scn);
+
+        if(scanner.hasNextInt()){
+            int readSeaLevel = scanner.nextInt();
+            scanner.nextLine();
+            return  readSeaLevel;
+        }
+        else{
+            scanner.next();
+            throw new InvalidDataException("Type Error!");
+        }
     }
 
     private static double readCoordinateY(Scanner scanner) throws InvalidDataException {
         System.out.print("  Y: ");
-        String scn = scanner.nextLine().trim();
-        return validateY(scn);
+        if(scanner.hasNextDouble()){
+            return validateY(scanner.nextDouble());
+
+        }
+        else{
+            scanner.next();
+            throw new InvalidDataException("Type Error!");
+        }
     }
 
-    private static int readIntPollution(Scanner scanner) throws InvalidDataException {
+    private static Integer readIntPollution(Scanner scanner) throws InvalidDataException {
         System.out.print("Enter the city's population: ");
-        String scn = scanner.nextLine().trim();
-        return InputValidator.validatePopulation(scn);
+        if(scanner.hasNextInt()){
+            Integer population = scanner.nextInt();
+            scanner.nextLine();
+            validatePopulation(population);
+            return population;
+        }
+        else{
+            scanner.next();
+            throw new InvalidDataException("Type Error!");
+        }
     }
 
     private static double readDoubleArea(Scanner scanner) throws InvalidDataException {
         System.out.println("Enter the area of the city: ");
-        String scn = scanner.nextLine().trim();
-        return InputValidator.validateArea(scn);
+        if(scanner.hasNextDouble()){
+            double ar = scanner.nextDouble();
+            InputValidator.validateArea(ar);
+            return ar;
+        }
+        else{
+            scanner.next();
+            throw new InvalidDataException("Type Error!");
+        }
     }
 
     private static Climate readEnumClimate(Scanner scanner) throws InvalidDataException {
         System.out.println("Available values: " + Arrays.toString(Climate.values()));
-        System.out.println("Select the climate (Enter to skip): ");
+        System.out.print("Select the climate (Enter to skip): ");
         String climateInput = scanner.nextLine().trim();
 
         return InputValidator.validateEnum(
@@ -247,12 +393,14 @@ public class ConsoleInputHandler {
         System.out.print("Add a governor? (y/n): ");
         String input = scanner.nextLine().trim();
         return input.equalsIgnoreCase("y")
-                || input.equalsIgnoreCase("yes")
-                || input.equalsIgnoreCase("да");
+                || input.equalsIgnoreCase("yes");
     }
 
     private static Date readDate(Scanner scanner) throws InvalidDataException {
-        System.out.print("Введите дату рождения (yyyy-MM-dd): ");
+        System.out.print("Enter your birthday (yyyy-MM-ddTHH:MM:SS): ");
         return InputValidator.validateBirthday(scanner.nextLine().trim());
     }
+
+
 }
+
