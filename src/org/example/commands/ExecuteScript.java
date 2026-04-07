@@ -61,10 +61,10 @@ public class ExecuteScript implements Command {
         executingScripts.add(absolutePath);
 
         Scanner previousScanner = CityReader.scanner;
-        // Вложенный execute_script: не дублировать заголовки и эхо строк в stdout
         boolean quiet = CityReader.isScriptMode();
         CityReader.enterScript();
-        try (Scanner fileScanner = new Scanner(file, "UTF-8")) {
+
+        try (Scanner fileScanner = new Scanner(file)) {
             CityReader.setScanner(fileScanner);
             if (!quiet) {
                 System.out.println("Executing script: " + fileName);

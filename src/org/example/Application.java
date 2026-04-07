@@ -2,16 +2,13 @@ package org.example;
 
 import lombok.Getter;
 import org.example.commands.Command;
-import org.example.exceptions.NoRightsException;
+import java.io.*;
 import org.example.data.City;
 import org.example.manager.ManagerCommands;
-import org.example.service.JsonFileInputReader;
 import org.example.service.JsonFileLoader;
 import org.example.validate.CityValidator;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
+
 import java.util.Map;
 import java.util.Stack;
 
@@ -28,7 +25,7 @@ public class Application {
     private ManagerCommands managerCommands;
 
 
-    public Application(String filename) throws IOException, NoRightsException {
+    public Application(String filename) throws IOException, NumberFormatException {
         this.fileName = filename;
         cityStack = JsonFileLoader.loadCollection(filename);
 

@@ -2,7 +2,7 @@ package org.example.service;
 
 import org.example.Application;
 import org.example.data.*;
-import org.example.exceptions.InvalidDataException;
+import java.io.*;
 import org.example.validate.CoordinatesValidator;
 import org.example.validate.InputValidator;
 
@@ -37,7 +37,7 @@ public class CityReader {
         return scriptDepth > 0;
     }
 
-    public static City readCity() throws InvalidDataException {
+    public static City readCity() throws IllegalArgumentException {
         Scanner scanner = CityReader.scanner;
         if (isScriptMode()) {
             return readCityFromScript(scanner);
@@ -52,7 +52,7 @@ public class CityReader {
                 city.setName(readName(scanner));
                 break;
             }
-            catch(InvalidDataException e) {
+            catch(IllegalArgumentException e) {
                 System.err.println("Error validation: " + e.getMessage());
                 System.out.println("Try to enter the data again.\n");
                 attempts++;
@@ -69,7 +69,7 @@ public class CityReader {
                 city.setCoordinates(coordinates);
                 break;
             }
-            catch(InvalidDataException e) {
+            catch(IllegalArgumentException e) {
                 System.err.println("Error validation: " + e.getMessage());
                 System.out.println("Try to enter the data again.\n");
                 attempts++;
@@ -83,7 +83,7 @@ public class CityReader {
                 city.setArea(area);
                 break;
             }
-            catch(InvalidDataException e) {
+            catch(IllegalArgumentException e) {
                 System.err.println("Error validation: " + e.getMessage());
                 System.out.println("Try to enter the data again.\n");
                 attempts++;
@@ -97,7 +97,7 @@ public class CityReader {
                 city.setPopulation(population);
                 break;
             }
-            catch(InvalidDataException e) {
+            catch(IllegalArgumentException e) {
                 System.err.println("Error validation: " + e.getMessage());
                 System.out.println("Try to enter the data again.\n");
                 attempts++;
@@ -110,7 +110,7 @@ public class CityReader {
                 city.setClimate(climate);
                 break;
             }
-            catch(InvalidDataException e) {
+            catch(IllegalArgumentException e) {
                 System.err.println("Error validation: " + e.getMessage());
                 System.out.println("Try to enter the data again.\n");
                 attempts++;
@@ -123,7 +123,7 @@ public class CityReader {
                 city.setMetersAboveSeaLevel(metersAboveSeaLevel);
                 break;
             }
-            catch(InvalidDataException e) {
+            catch(IllegalArgumentException e) {
                 System.err.println("Error validation: " + e.getMessage());
                 System.out.println("Try to enter the data again.\n");
                 attempts++;
@@ -136,7 +136,7 @@ public class CityReader {
                 city.setGovernment(government);
                 break;
             }
-            catch(InvalidDataException e) {
+            catch(IllegalArgumentException e) {
                 System.err.println("Error validation: " + e.getMessage());
                 System.out.println("Try to enter the data again.\n");
                 attempts++;
@@ -150,7 +150,7 @@ public class CityReader {
                 city.setStandardOfLiving(standardOfLiving);
                 break;
             }
-            catch(InvalidDataException e) {
+            catch(IllegalArgumentException e) {
                 System.err.println("Error validation: " + e.getMessage());
                 System.out.println("Try to enter the data again.\n");
                 attempts++;
@@ -168,7 +168,7 @@ public class CityReader {
                             governor = new Human(birthday);
                             break;
                         }
-                        catch(InvalidDataException e) {
+                        catch(IllegalArgumentException e) {
                             System.err.println("Error validation: " + e.getMessage());
                             System.out.println("Try to enter the date again.\n");
                             date++;
@@ -176,14 +176,14 @@ public class CityReader {
                     }
 
                     if (governor == null) {
-                        throw new InvalidDataException("Too many failed attempts for birthday");
+                        throw new IllegalArgumentException("Too many failed attempts for birthday");
                     }
                 }
 
                 city.setGovernor(governor);
                 break;
             }
-            catch(InvalidDataException e) {
+            catch(IllegalArgumentException e) {
                 System.err.println("Error validation: " + e.getMessage());
                 System.out.println("Try to enter the data again.\n");
                 attempts++;
@@ -205,7 +205,7 @@ public class CityReader {
     }
 
 
-    private static City readCityFromScript(Scanner scanner) throws InvalidDataException {
+    private static City readCityFromScript(Scanner scanner) throws IllegalArgumentException {
         City city = new City();
         try {
             String nameLine = nextLineRequired(scanner);
@@ -260,16 +260,16 @@ public class CityReader {
             return city;
         } catch (NumberFormatException e) {
             System.err.println("Script parse error: " + e.getMessage());
-            throw new InvalidDataException("Invalid number in script");
-        } catch (InvalidDataException e) {
+            throw new IllegalArgumentException("Invalid number in script");
+        } catch (IllegalArgumentException e) {
             System.err.println("Script validation: " + e.getMessage());
             throw e;
         }
     }
 
-    private static String nextLineRequired(Scanner scanner) throws InvalidDataException {
+    private static String nextLineRequired(Scanner scanner) throws IllegalArgumentException {
         if (!scanner.hasNextLine()) {
-            throw new InvalidDataException("Unexpected end of script file");
+            throw new IllegalArgumentException("Unexpected end of script file");
         }
         return scanner.nextLine();
     }
@@ -279,24 +279,24 @@ public class CityReader {
         return s.equalsIgnoreCase("y") || s.equalsIgnoreCase("yes") || s.equalsIgnoreCase("да");
     }
 
-    private static String readName(Scanner scanner) throws InvalidDataException {
+    private static String readName(Scanner scanner) throws IllegalArgumentException {
         System.out.print("Enter the name of the city: ");
         String input = scanner.nextLine();
         return validateName(input);
     }
 
-    private static float readCoordinateX(Scanner scanner) throws InvalidDataException {
+    private static float readCoordinateX(Scanner scanner) throws IllegalArgumentException {
         System.out.print("  X: ");
         if(scanner.hasNextFloat()){
             return validateX(scanner.nextFloat());
         }
         else{
             scanner.next();
-            throw new InvalidDataException("Type Error!");
+            throw new IllegalArgumentException("Type Error!");
         }
     }
 
-    private static int readSeaLevel(Scanner scanner) throws InvalidDataException {
+    private static int readSeaLevel(Scanner scanner) throws IllegalArgumentException {
         System.out.print("Enter the height above sea level: ");
 
         if(scanner.hasNextInt()){
@@ -306,11 +306,11 @@ public class CityReader {
         }
         else{
             scanner.next();
-            throw new InvalidDataException("Type Error!");
+            throw new IllegalArgumentException("Type Error!");
         }
     }
 
-    private static double readCoordinateY(Scanner scanner) throws InvalidDataException {
+    private static double readCoordinateY(Scanner scanner) throws IllegalArgumentException {
         System.out.print("  Y: ");
         if(scanner.hasNextDouble()){
             return validateY(scanner.nextDouble());
@@ -318,11 +318,11 @@ public class CityReader {
         }
         else{
             scanner.next();
-            throw new InvalidDataException("Type Error!");
+            throw new IllegalArgumentException("Type Error!");
         }
     }
 
-    private static Integer readIntPollution(Scanner scanner) throws InvalidDataException {
+    private static Integer readIntPollution(Scanner scanner) throws IllegalArgumentException {
         System.out.print("Enter the city's population: ");
         if(scanner.hasNextInt()){
             Integer population = scanner.nextInt();
@@ -332,11 +332,11 @@ public class CityReader {
         }
         else{
             scanner.next();
-            throw new InvalidDataException("Type Error!");
+            throw new IllegalArgumentException("Type Error!");
         }
     }
 
-    private static double readDoubleArea(Scanner scanner) throws InvalidDataException {
+    private static double readDoubleArea(Scanner scanner) throws IllegalArgumentException {
         System.out.println("Enter the area of the city: ");
         if(scanner.hasNextDouble()){
             double ar = scanner.nextDouble();
@@ -345,11 +345,11 @@ public class CityReader {
         }
         else{
             scanner.next();
-            throw new InvalidDataException("Type Error!");
+            throw new IllegalArgumentException("Type Error!");
         }
     }
 
-    private static Climate readEnumClimate(Scanner scanner) throws InvalidDataException {
+    private static Climate readEnumClimate(Scanner scanner) throws IllegalArgumentException {
         System.out.println("Available values: " + Arrays.toString(Climate.values()));
         System.out.print("Select the climate (Enter to skip): ");
         String climateInput = scanner.nextLine().trim();
@@ -362,7 +362,7 @@ public class CityReader {
         );
     }
 
-    private static Government readEnumGovernment(Scanner scanner) throws InvalidDataException {
+    private static Government readEnumGovernment(Scanner scanner) throws IllegalArgumentException {
         System.out.println("Available values: " + Arrays.toString(Government.values()));
         System.out.println("Choose a form of government: ");
         String govInput = scanner.nextLine().trim();
@@ -375,7 +375,7 @@ public class CityReader {
         );
     }
 
-    private static StandardOfLiving readEnumStandard(Scanner scanner) throws InvalidDataException {
+    private static StandardOfLiving readEnumStandard(Scanner scanner) throws IllegalArgumentException {
         System.out.println("Available values: " + Arrays.toString(StandardOfLiving.values()));
         System.out.print("Select the standard of living (Enter to skip): ");
         String input = scanner.nextLine().trim();
@@ -396,7 +396,7 @@ public class CityReader {
                 || input.equalsIgnoreCase("yes");
     }
 
-    private static Date readDate(Scanner scanner) throws InvalidDataException {
+    private static Date readDate(Scanner scanner) throws IllegalArgumentException {
         System.out.print("Enter your birthday (yyyy-MM-ddTHH:MM:SS): ");
         return InputValidator.validateBirthday(scanner.nextLine().trim());
     }

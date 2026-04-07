@@ -1,20 +1,19 @@
 package org.example.validate;
 
 import org.example.data.City;
-import org.example.exceptions.InvalidDataException;
+import java.io.*;
 
-import java.time.format.DateTimeParseException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 public class InputValidator {
 
-    public static void validateUniqueIds(Collection<City> cities) throws InvalidDataException {
+    public static void validateUniqueIds(Collection<City> cities) throws IllegalArgumentException {
         Set<Long> ids = new HashSet<>();
         for (City city : cities) {
             if (!ids.add(city.getId())) {
-                throw new InvalidDataException("Duplicate ID found: " + city.getId());
+                throw new IllegalArgumentException("Duplicate ID found: " + city.getId());
             }
         }
     }
@@ -30,61 +29,61 @@ public class InputValidator {
 
     //-------------------------------
 
-    public static void validateId(Long id) throws InvalidDataException {
+    public static void validateId(Long id) throws IllegalArgumentException {
         if (id == null) {
-            throw new InvalidDataException("ID cannot be null");
+            throw new IllegalArgumentException("ID cannot be null");
         }
         if (id <= MIN_ID) {
-            throw new InvalidDataException("ID must be greater than 0 (received: " + id + ")");
+            throw new IllegalArgumentException("ID must be greater than 0 (received: " + id + ")");
         }
     }
 
     //----------------
 
-    public static Float validateX(Float x) throws InvalidDataException {
+    public static Float validateX(Float x) throws IllegalArgumentException {
         if (x == null) {
-            throw new InvalidDataException("X coordinate cannot be empty");
+            throw new IllegalArgumentException("X coordinate cannot be empty");
         }
 
         try {
             if (x > MAX_X) {
-                throw new InvalidDataException(
+                throw new IllegalArgumentException(
                         "X coordinate cannot exceed " + MAX_X + " (received: " + x + ")"
                 );
             }
             return x;
         } catch (NumberFormatException e) {
-            throw new InvalidDataException("X coordinate must be a valid float number");
+            throw new IllegalArgumentException("X coordinate must be a valid float number");
         }
     }
 
-    public static Double validateY(Double y) throws InvalidDataException {
+    public static Double validateY(Double y) throws IllegalArgumentException {
         if (y == null) {
-            throw new InvalidDataException("Y coordinate cannot be empty");
+            throw new IllegalArgumentException("Y coordinate cannot be empty");
         }
 
         try {
             if (y > MAX_Y) {
-                throw new InvalidDataException(
+                throw new IllegalArgumentException(
                         "Y coordinate cannot exceed " + MAX_Y + " (received: " + y + ")"
                 );
             }
             return y;
         } catch (NumberFormatException e) {
-            throw new InvalidDataException("Y coordinate must be a valid double number");
+            throw new IllegalArgumentException("Y coordinate must be a valid double number");
         }
     }
 
     //-----------------------------------------
 
-    public static void validateCoordinates(float x, double y) throws InvalidDataException {
+    public static void validateCoordinates(float x, double y) throws IllegalArgumentException {
         if (x > MAX_X) {
-            throw new InvalidDataException(
+            throw new IllegalArgumentException(
                     "X coordinate cannot exceed " + MAX_X + " (received: " + x + ")"
             );
         }
         if (y > MAX_Y) {
-            throw new InvalidDataException(
+            throw new IllegalArgumentException(
                     "Y coordinate cannot exceed " + MAX_Y + " (received: " + y + ")"
             );
         }
@@ -94,29 +93,29 @@ public class InputValidator {
 
 
 
-    public static void validatePopulation(Integer population) throws InvalidDataException {
+    public static void validatePopulation(Integer population) throws IllegalArgumentException {
         if (population == null) {
-            throw new InvalidDataException("Population cannot be empty");
+            throw new IllegalArgumentException("Population cannot be empty");
         }
 
         try {
             if (population <= MIN_POPULATION) {
-                throw new InvalidDataException("Population must be greater than 0 (received: " + population + ")");
+                throw new IllegalArgumentException("Population must be greater than 0 (received: " + population + ")");
             }
         } catch (NumberFormatException e) {
-            throw new InvalidDataException("Population must be a valid integer number");
+            throw new IllegalArgumentException("Population must be a valid integer number");
         }
     }
 
 
     //-----------------------------
 
-    public static void validateArea(Double area) throws InvalidDataException {
+    public static void validateArea(Double area) throws IllegalArgumentException {
         if (area == null) {
-            throw new InvalidDataException("Area cannot be null");
+            throw new IllegalArgumentException("Area cannot be null");
         }
         if (area <= MIN_AREA) {
-            throw new InvalidDataException("Area must be greater than 0 (received: " + area + ")");
+            throw new IllegalArgumentException("Area must be greater than 0 (received: " + area + ")");
         }
     }
 
@@ -124,18 +123,18 @@ public class InputValidator {
 
 
 
-    public static String validateName(String name) throws InvalidDataException {
+    public static String validateName(String name) throws IllegalArgumentException {
         if (name == null || name.trim().isEmpty()) {
-            throw new InvalidDataException("Name cannot be empty");
+            throw new IllegalArgumentException("Name cannot be empty");
         }
         return name.trim();
     }
 
     //-----------------------------------------
 
-    public static java.util.Date validateCreationDate(String dateString) throws InvalidDataException {
+    public static java.util.Date validateCreationDate(String dateString) throws IllegalArgumentException {
         if (dateString == null || dateString.trim().isEmpty()) {
-            throw new InvalidDataException("Creation date cannot be empty");
+            throw new IllegalArgumentException("Creation date cannot be empty");
         }
 
         try {
@@ -143,19 +142,20 @@ public class InputValidator {
             format.setLenient(false);
             return format.parse(dateString.trim());
         } catch (Exception e) {
-            throw new InvalidDataException("Invalid date format. Expected: yyyy-MM-dd'T'HH:mm:ss");
+            throw new IllegalArgumentException("Invalid date format. Expected: yyyy-MM-dd'T'HH:mm:ss");
         }
     }
 
     //-----------------------
 
-    public static java.util.Date validateBirthday(String dateString) throws InvalidDataException {
+    public static java.util.Date validateBirthday(String dateString) throws IllegalArgumentException {
         if (dateString == null || dateString.trim().isEmpty()) {
-            throw new InvalidDataException("Birthday cannot be empty");
+            throw new IllegalArgumentException("Birthday cannot be empty");
         }
 
         String s = dateString.trim();
-        String[] patterns = {"yyyy-MM-dd'T'HH:mm:ss", "yyyy-MM-dd"};
+        //@JsonFormat(pattern = "yyyy-MM-dd")
+        String[] patterns = {"yyyy-MM-dd"};
         for (String pattern : patterns) {
             try {
                 java.text.SimpleDateFormat format = new java.text.SimpleDateFormat(pattern);
@@ -165,7 +165,7 @@ public class InputValidator {
                 // try next pattern
             }
         }
-        throw new InvalidDataException("Invalid birthday format. Expected: yyyy-MM-dd or yyyy-MM-dd'T'HH:mm:ss");
+        throw new IllegalArgumentException("Invalid birthday format. Expected: yyyy-MM-dd or yyyy-MM-dd'T'HH:mm:ss");
     }
 
 
@@ -175,19 +175,19 @@ public class InputValidator {
             String value,
             Class<T> enumClass,
             String fieldName,
-            boolean required) throws InvalidDataException {
+            boolean required) throws IllegalArgumentException {
 
         if (value == null || value.trim().isEmpty()) {
             if (required) {
-                throw new InvalidDataException(fieldName + " cannot be empty");
+                throw new IllegalArgumentException(fieldName + " cannot be empty");
             }
             return null;
         }
 
         try {
             return Enum.valueOf(enumClass, value.trim().toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new InvalidDataException(
+        } catch (java.lang.IllegalArgumentException e) {
+            throw new IllegalArgumentException(
                     "Invalid " + fieldName + ". Valid values: " + java.util.Arrays.toString(enumClass.getEnumConstants())
             );
         }
@@ -196,9 +196,9 @@ public class InputValidator {
 
     //-------------------------------
 
-    public static void validateNotNull(Object obj, String fieldName) throws InvalidDataException {
+    public static void validateNotNull(Object obj, String fieldName) throws IllegalArgumentException {
         if (obj == null) {
-            throw new InvalidDataException(fieldName + " cannot be null");
+            throw new IllegalArgumentException(fieldName + " cannot be null");
         }
     }
 

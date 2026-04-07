@@ -1,7 +1,6 @@
 package org.example.commands;
 
 import org.example.Application;
-import org.example.exceptions.InvalidDataException;
 import org.example.data.City;
 import org.example.validate.InputValidator;
 

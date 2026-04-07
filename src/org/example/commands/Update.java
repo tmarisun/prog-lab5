@@ -2,7 +2,8 @@ package org.example.commands;
 
 import org.example.Application;
 import org.example.data.City;
-import org.example.exceptions.InvalidDataException;
+
+import java.io.*;
 import org.example.service.CityReader;
 import org.example.validate.CityValidator;
 import org.example.validate.InputValidator;
@@ -68,7 +69,7 @@ public class Update implements Command {
 
             System.out.println("City updated successfully (element kept in collection, id preserved).");
 
-        } catch (NumberFormatException | InvalidDataException e) {
+        } catch (IllegalArgumentException e) {
             System.out.println("Invalid ID format.");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());

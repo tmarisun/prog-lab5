@@ -6,11 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.data.City;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Stack;
 
@@ -42,7 +38,7 @@ public class JsonFileLoader {
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-
+        //mapper.setDateFormat(new java.text.SimpleDateFormat("yyyy-MM-dd"));
         return mapper.readValue(content.toString(), new TypeReference<Stack<City>>() {});
     }
 

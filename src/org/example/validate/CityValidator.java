@@ -1,15 +1,11 @@
 package org.example.validate;
 
 import org.example.data.City;
-import org.example.exceptions.InvalidDataException;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.*;;
 
 public class CityValidator {
 
-    public static void validateCity(City city) throws InvalidDataException {
+    public static void validateCity(City city) throws IllegalArgumentException {
         InputValidator.validateId(city.getId());
         InputValidator.validateName(city.getName());
         InputValidator.validateArea(city.getArea());
