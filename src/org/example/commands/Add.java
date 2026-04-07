@@ -6,6 +6,8 @@ import org.example.service.InputReader;
 import org.example.service.InputReaderFactory;
 import org.example.validate.CityValidator;
 
+import static org.example.service.CityReader.scanner;
+
 /**
  * Команда добавления города в коллекцию (с консоли или из JSON-файла, если указан аргумент).
  */
@@ -30,7 +32,7 @@ public class Add implements Command {
     public void execute(String[] args) {
         try {
             String filePath = (args.length >= 2) ? args[1] : null;
-            InputReader reader = InputReaderFactory.createReader(filePath, org.example.service.CityReader.scanner);
+            InputReader reader = InputReaderFactory.createReader(filePath, scanner);
             City city = reader.readCity();
 
             if (city == null) {

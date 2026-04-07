@@ -17,7 +17,7 @@ public class Main {
         try {
             Application app = new Application(fileName);
             Scene scene = new Scene(app);
-            Scene.run();
+            scene.run();
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }

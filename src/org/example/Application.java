@@ -20,8 +20,6 @@ import static org.example.validate.InputValidator.validateUniqueIds;
 
 public class Application {
 
-    public static final String SCRIPT_CITY_FILE = "script_city.json";
-
     @Getter
     private static Stack<City> cityStack;
     @Getter
@@ -33,16 +31,18 @@ public class Application {
     public Application(String filename) throws IOException, NoRightsException {
         this.fileName = filename;
         cityStack = JsonFileLoader.loadCollection(filename);
+
         for (City city : cityStack) {
             CityValidator.validateCity(city);
         }
+
         validateUniqueIds(cityStack);
-        mergeScriptCityFileIfPresent();
+        //mergeScriptCityFileIfPresent();
         this.managerCommands = new ManagerCommands(this);
     }
 
 
-    private void mergeScriptCityFileIfPresent() {
+    /*private void mergeScriptCityFileIfPresent() {
         File scriptFile = new File(SCRIPT_CITY_FILE);
         if (!scriptFile.exists() || !scriptFile.isFile()) {
             return;
@@ -70,7 +70,7 @@ public class Application {
         } catch (Exception e) {
             System.out.println("Warning: не удалось загрузить " + SCRIPT_CITY_FILE + ": " + e.getMessage());
         }
-    }
+    }*/
 
     public static long getSize() {
         return cityStack.size();
@@ -96,7 +96,7 @@ public class Application {
         Map<String, Command> commands = managerCommands.getCommands();
         for (Map.Entry<String, Command> entry : commands.entrySet()) {
             Command value = entry.getValue();
-            System.out.print(value.getName() + " ");
+            System.out.print(value.getName() + " ------- ");
             System.out.println(value.getDescription());
         }
     }

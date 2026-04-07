@@ -1,5 +1,6 @@
 package org.example;
 
+import lombok.Getter;
 import org.example.manager.ManagerCommands;
 import org.example.service.CityReader;
 
@@ -7,6 +8,7 @@ import java.util.Scanner;
 import java.util.NoSuchElementException;
 
 
+@Getter
 public class Scene {
     private final Application app;
     private static ManagerCommands manager;
@@ -19,7 +21,7 @@ public class Scene {
     }
 
 
-    public static void run() {
+    public void run() {
         System.out.println("The program is running. Enter 'help' for help.");
         while (true) {
             System.out.print("> ");
@@ -39,4 +41,5 @@ public class Scene {
             if (parts[0].equalsIgnoreCase("exit")) break;
         }
     }
+
 }

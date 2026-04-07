@@ -4,6 +4,7 @@ import org.example.Application;
 import org.example.data.City;
 import org.example.data.StandardOfLiving;
 
+import javax.smartcardio.Card;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,11 +27,18 @@ public class PrintFieldAscendingStandardOfLiving implements Command {
     public void execute(String[] args) {
         Stack<City> stack = Application.getCityStack();
 
-        List<StandardOfLiving> values = stack.stream()
-                .map(City::getStandardOfLiving)
-                .filter(Objects::nonNull)
-                .sorted(Comparator.comparingInt(StandardOfLiving::getRank))
-                .toList();
+        List<StandardOfLiving> values = new ArrayList<>();
+        for (City city : stack) {
+            if (city.getStandardOfLiving() != null) {
+                values.add(city.getStandardOfLiving());
+            }
+        }
+        values.sort(new Comparator<StandardOfLiving>() {
+            @Override
+            public int compare(StandardOfLiving a, StandardOfLiving b) {
+                return Integer.compare(a.getRank(), b.getRank());
+            }
+        });
 
         if (values.isEmpty()) {
             System.out.println("No standard of living values available.");

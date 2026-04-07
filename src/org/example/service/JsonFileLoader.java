@@ -42,7 +42,6 @@ public class JsonFileLoader {
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
 
         return mapper.readValue(content.toString(), new TypeReference<Stack<City>>() {});
     }

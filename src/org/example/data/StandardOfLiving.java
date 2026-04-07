@@ -16,8 +16,4 @@ public enum StandardOfLiving {
         this.rank = rank;
     }
 
-    public int getRank() {
-        return rank;
-    }
-
 }

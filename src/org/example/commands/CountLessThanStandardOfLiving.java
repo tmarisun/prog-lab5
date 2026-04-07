@@ -29,18 +29,18 @@ public class CountLessThanStandardOfLiving implements Command {
         }
 
         try {
-            StandardOfLiving threshold = StandardOfLiving.valueOf(args[1].trim().toUpperCase());
+            StandardOfLiving x = StandardOfLiving.valueOf(args[1].trim().toUpperCase());
             Stack<City> stack = Application.getCityStack();
             int count = 0;
 
             for (City city : stack) {
                 StandardOfLiving sol = city.getStandardOfLiving();
-                if (sol != null && sol.getRank() < threshold.getRank()) {
+                if (sol != null && sol.getRank() < x.getRank()) {
                     count++;
                 }
             }
 
-            System.out.println("Cities with standard of living below " + threshold + ": " + count);
+            System.out.println("Cities with standard of living below " + x + ": " + count);
 
         } catch (IllegalArgumentException e) {
             System.out.println("Invalid StandardOfLiving value. Valid values: HIGH, MEDIUM, LOW, ULTRA_LOW, NIGHTMARE");

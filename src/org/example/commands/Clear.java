@@ -5,8 +5,7 @@ import java.util.Scanner;
 
 public class Clear implements Command {
 
-    public Clear(Application app) {
-    }
+    public Clear(Application app) {}
 
     @Override
     public String getName() {
